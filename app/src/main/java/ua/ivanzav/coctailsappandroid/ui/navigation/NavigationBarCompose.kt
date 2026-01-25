@@ -67,7 +67,7 @@ fun AppPagerHost(
 ) {
     HorizontalPager(
         state = pagerState,
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) { pageIndex ->
         when (BottomNavItems.entries[pageIndex]) {
             BottomNavItems.ALCOHOL -> AlcoholCocktailsScreen()
