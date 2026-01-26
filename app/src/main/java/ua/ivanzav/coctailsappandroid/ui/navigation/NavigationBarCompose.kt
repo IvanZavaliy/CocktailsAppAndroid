@@ -77,7 +77,9 @@ fun AppPagerHost(
         when (BottomNavItems.entries[pageIndex]) {
             BottomNavItems.ALCOHOL ->
             {
-                val alcoholViewModel: AlcoholViewModel = viewModel()
+                val alcoholViewModel: AlcoholViewModel = viewModel(
+                    factory = AlcoholViewModel.Factory
+                )
 
                 LaunchedEffect(isVisible) {
                     if (isVisible) {
@@ -92,7 +94,9 @@ fun AppPagerHost(
             }
             BottomNavItems.NONALCOHOL ->
             {
-                val nonAlcoholViewModel: NonAlcoholViewModel = viewModel()
+                val nonAlcoholViewModel: NonAlcoholViewModel = viewModel(
+                    factory = NonAlcoholViewModel.Factory
+                )
 
                 LaunchedEffect(isVisible) {
                     if (isVisible) {
