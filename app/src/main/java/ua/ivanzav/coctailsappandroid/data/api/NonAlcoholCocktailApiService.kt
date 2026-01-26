@@ -16,11 +16,22 @@ private val retrofit = Retrofit.Builder()
 
 interface NonAlcoholCocktailApiService {
     @GET("api/json/v1/1/filter.php?a=Non_Alcoholic")
-    suspend fun getPhotos(): CocktailResponse
+    suspend fun getModels(): CocktailResponse
+}
+
+interface AlcoholicCocktailApiService {
+    @GET("api/json/v1/1/filter.php?a=Alcoholic")
+    suspend fun getModels(): CocktailResponse
 }
 
 object NonAlcoholCocktailApi {
     val retrofitService : NonAlcoholCocktailApiService by lazy {
         retrofit.create(NonAlcoholCocktailApiService::class.java)
+    }
+}
+
+object AlcoholCocktailApi {
+    val retrofitService : AlcoholicCocktailApiService by lazy {
+        retrofit.create(AlcoholicCocktailApiService::class.java)
     }
 }

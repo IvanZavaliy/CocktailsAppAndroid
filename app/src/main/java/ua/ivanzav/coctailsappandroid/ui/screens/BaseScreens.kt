@@ -34,7 +34,9 @@ fun BaseScreen (
         is CocktailsAppUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
         is CocktailsAppUiState.Success ->
             when {
-                cocktailsAppUiState.page == CocktailsPage.ALCOHOL -> AlcoholCocktailsScreen()
+                cocktailsAppUiState.page == CocktailsPage.ALCOHOL -> AlcoholCocktailsScreen(
+                    cocktailsAppUiState.cocktailModels, modifier = modifier.fillMaxWidth()
+                )
                 cocktailsAppUiState.page == CocktailsPage.NONALCOHOL -> NonAlcoholCocktailsScreen(
                     cocktailsAppUiState.cocktailModels, modifier = modifier.fillMaxWidth()
                 )

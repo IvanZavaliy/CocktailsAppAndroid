@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 import ua.ivanzav.coctailsappandroid.ui.screens.BaseScreen
-import ua.ivanzav.coctailsappandroid.ui.screens.alcohol.AlcoholCocktailsScreen
+import ua.ivanzav.coctailsappandroid.ui.screens.alcohol.AlcoholViewModel
 import ua.ivanzav.coctailsappandroid.ui.screens.nonalcohol.NonAlcoholViewModel
 
 @Preview(showBackground = true)
@@ -77,17 +77,32 @@ fun AppPagerHost(
         when (BottomNavItems.entries[pageIndex]) {
             BottomNavItems.ALCOHOL ->
             {
-                AlcoholCocktailsScreen()
+                val alcoholViewModel: AlcoholViewModel = viewModel()
+
+                LaunchedEffect(isVisible) {
+                    if (isVisible) {
+                        alcoholViewModel.getAlcoholCocktailModels()
+                    }
+                }
+
+                BaseScreen(
+                    cocktailsAppUiState = alcoholViewModel.alcoholUiState,
+                    retryAction = alcoholViewModel::getAlcoholCocktailModels
+                )
             }
             BottomNavItems.NONALCOHOL ->
             {
                 val nonAlcoholViewModel: NonAlcoholViewModel = viewModel()
 
-                LaunchedEffect(isVisible) { }
+                LaunchedEffect(isVisible) {
+                    if (isVisible) {
+                        nonAlcoholViewModel.getNonAlcoholicCocktailModels()
+                    }
+                }
 
                 BaseScreen(
                     cocktailsAppUiState =  nonAlcoholViewModel.nonAlcoholUiState,
-                    retryAction = nonAlcoholViewModel::getNonAlcoholicCocktailsModels
+                    retryAction = nonAlcoholViewModel::getNonAlcoholicCocktailModels
                 )
             }
         }

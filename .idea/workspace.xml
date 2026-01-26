@@ -10,19 +10,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="39add012-fbb0-4211-8101-f2983359b215" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gradle/9.1.0/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.1.0/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.1.0/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.1.0/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.1.0/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.1.0/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.1.0/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.1.0/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/data/api/NonAlcoholCocktailApiService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/data/api/NonAlcoholCocktailApiService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/data/repository/CocktailsAppRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/data/repository/CocktailsAppRepository.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/components/CocktailCard.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/components/CocktailCard.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/navigation/NavigationBarCompose.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/navigation/NavigationBarCompose.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/BaseScreens.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/BaseScreens.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/alcohol/AlcoholScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/alcohol/AlcoholScreen.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/nonalcohol/NonAlcoholScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/nonalcohol/NonAlcoholScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/problems/problems-report.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/problems/problems-report.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/nonalcohol/NonAlcoholViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/nonalcohol/NonAlcoholViewModel.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,8 +56,8 @@
       <list>
         <option value="Kotlin Data Class" />
         <option value="Kotlin Enum" />
-        <option value="Kotlin Interface" />
         <option value="Kotlin File" />
+        <option value="Kotlin Interface" />
         <option value="Kotlin Class" />
       </list>
     </option>

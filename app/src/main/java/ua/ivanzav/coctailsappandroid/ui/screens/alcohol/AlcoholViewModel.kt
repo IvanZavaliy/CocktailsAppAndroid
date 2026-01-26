@@ -1,4 +1,4 @@
-package ua.ivanzav.coctailsappandroid.ui.screens.nonalcohol
+package ua.ivanzav.coctailsappandroid.ui.screens.alcohol
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -6,25 +6,25 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ua.ivanzav.coctailsappandroid.data.api.NonAlcoholCocktailApi
+import okio.IOException
+import ua.ivanzav.coctailsappandroid.data.api.AlcoholCocktailApi
 import ua.ivanzav.coctailsappandroid.ui.navigation.CocktailsAppUiState
 import ua.ivanzav.coctailsappandroid.ui.navigation.CocktailsPage
-import java.io.IOException
 
-class NonAlcoholViewModel() : ViewModel() {
-    var nonAlcoholUiState: CocktailsAppUiState by mutableStateOf(CocktailsAppUiState.Loading)
+class AlcoholViewModel : ViewModel() {
+    var alcoholUiState : CocktailsAppUiState by mutableStateOf(CocktailsAppUiState.Loading)
         private set
 
     init {
-        getNonAlcoholicCocktailModels()
+        getAlcoholCocktailModels()
     }
 
-    fun getNonAlcoholicCocktailModels() {
+    fun getAlcoholCocktailModels() {
         viewModelScope.launch {
-            nonAlcoholUiState = try {
-                val response = NonAlcoholCocktailApi.retrofitService.getModels()
+            alcoholUiState = try {
+                val response = AlcoholCocktailApi.retrofitService.getModels()
                 val listResult = response.drinks
-                CocktailsAppUiState.Success(listResult, CocktailsPage.NONALCOHOL)
+                CocktailsAppUiState.Success(listResult, CocktailsPage.ALCOHOL)
             } catch (e: IOException) {
                 CocktailsAppUiState.Error
             }

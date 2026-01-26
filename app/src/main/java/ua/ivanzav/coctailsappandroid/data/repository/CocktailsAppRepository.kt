@@ -10,5 +10,5 @@ interface CocktailsAppRepository {
 class NetworkCocktailsAppRepository(
     private val nonAlcoholCocktailApiService: NonAlcoholCocktailApiService
 ) : CocktailsAppRepository {
-    override suspend fun getNonAlcoholCocktailsPhotos(): CocktailResponse = nonAlcoholCocktailApiService.getPhotos()
+    override suspend fun getNonAlcoholCocktailsPhotos(): CocktailResponse = nonAlcoholCocktailApiService.getModels()
 }
