@@ -12,6 +12,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -19,9 +20,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
+import ua.ivanzav.coctailsappandroid.ui.screens.BaseScreen
 import ua.ivanzav.coctailsappandroid.ui.screens.alcohol.AlcoholCocktailsScreen
-import ua.ivanzav.coctailsappandroid.ui.screens.nonalcohol.NonAlcoholCocktailsScreen
+import ua.ivanzav.coctailsappandroid.ui.screens.nonalcohol.NonAlcoholViewModel
 
 @Preview(showBackground = true)
 @Composable
@@ -37,7 +40,7 @@ fun NavigationBarApp(modifier: Modifier = Modifier) {
             NavigationBar(windowInsets = NavigationBarDefaults.windowInsets) {
                 BottomNavItems.entries.forEachIndexed { index, destination ->
                     NavigationBarItem(
-                        selected = selectedDestination == index,
+                        selected = pagerState.currentPage == index,
                         onClick = {
                             selectedDestination = index
                             coroutineScope.launch {
@@ -69,9 +72,24 @@ fun AppPagerHost(
         state = pagerState,
         modifier = modifier.fillMaxSize()
     ) { pageIndex ->
+        val isVisible = pagerState.currentPage == pageIndex
+
         when (BottomNavItems.entries[pageIndex]) {
-            BottomNavItems.ALCOHOL -> AlcoholCocktailsScreen()
-            BottomNavItems.NONALCOHOL -> NonAlcoholCocktailsScreen()
+            BottomNavItems.ALCOHOL ->
+            {
+                AlcoholCocktailsScreen()
+            }
+            BottomNavItems.NONALCOHOL ->
+            {
+                val nonAlcoholViewModel: NonAlcoholViewModel = viewModel()
+
+                LaunchedEffect(isVisible) { }
+
+                BaseScreen(
+                    cocktailsAppUiState =  nonAlcoholViewModel.nonAlcoholUiState,
+                    retryAction = nonAlcoholViewModel::getNonAlcoholicCocktailsModels
+                )
+            }
         }
     }
 }

@@ -1,23 +1,39 @@
 package ua.ivanzav.coctailsappandroid.ui.screens.nonalcohol
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import ua.ivanzav.coctailsappandroid.data.model.CocktailModelJson
+import ua.ivanzav.coctailsappandroid.ui.components.CocktailCard
 
 @Composable
-fun NonAlcoholCocktailsScreen(modifier: Modifier = Modifier){
+fun NonAlcoholCocktailsScreen(cocktailModels: List<CocktailModelJson>, modifier: Modifier = Modifier){
     Box(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .padding(4.dp),
         contentAlignment = Alignment.Center
     ) {
-        val nonAlcoholViewModel: NonAlcoholViewModel = viewModel()
-        val nonAlcoholUiState: String = nonAlcoholViewModel.nonAlcoholUiState
-        Text("Non-alcohol cocktails screen")
-        Text(nonAlcoholUiState)
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            modifier = Modifier
+                .fillMaxSize(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            items(items = cocktailModels, key = { model -> model.id}) { model ->
+                CocktailCard(model)
+            }
+        }
     }
 }

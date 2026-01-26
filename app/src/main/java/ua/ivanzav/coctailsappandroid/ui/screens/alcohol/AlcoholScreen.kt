@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import ua.ivanzav.coctailsappandroid.data.model.CocktailModelJson
 import ua.ivanzav.coctailsappandroid.ui.components.CocktailCard
 
 @Preview(showBackground = true)
@@ -32,9 +33,8 @@ fun AlcoholCocktailsScreen(modifier: Modifier = Modifier){
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             items(16){
-                CocktailCard()
+                CocktailCard(CocktailModelJson("Cocktail", "https://www.thecocktaildb.com/images/media/drink/xxyywq1454511117.jpg", "123"))
             }
         }
-
     }
 }

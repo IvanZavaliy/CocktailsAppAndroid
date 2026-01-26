@@ -7,25 +7,26 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ua.ivanzav.coctailsappandroid.data.api.NonAlcoholCocktailApi
+import ua.ivanzav.coctailsappandroid.ui.navigation.CocktailsAppUiState
+import ua.ivanzav.coctailsappandroid.ui.navigation.CocktailsPage
 import java.io.IOException
 
-
 class NonAlcoholViewModel() : ViewModel() {
-    var nonAlcoholUiState: String by mutableStateOf ("")
+    var nonAlcoholUiState: CocktailsAppUiState by mutableStateOf(CocktailsAppUiState.Loading)
         private set
 
     init {
-        getNonAlcoholicCocktailsPhoto()
+        getNonAlcoholicCocktailsModels()
     }
 
-    fun getNonAlcoholicCocktailsPhoto() {
+    fun getNonAlcoholicCocktailsModels() {
         viewModelScope.launch {
-            try {
-                val listResult = NonAlcoholCocktailApi.retrofitService.getPhotos()
-                nonAlcoholUiState = listResult
-            }
-            catch (e: IOException) {
-
+            nonAlcoholUiState = try {
+                val response = NonAlcoholCocktailApi.retrofitService.getPhotos()
+                val listResult = response.drinks
+                CocktailsAppUiState.Success(listResult, CocktailsPage.NONALCOHOL)
+            } catch (e: IOException) {
+                CocktailsAppUiState.Error
             }
         }
     }
