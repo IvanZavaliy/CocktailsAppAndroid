@@ -1,4 +1,4 @@
-package ua.ivanzav.coctailsappandroid.ui.screens.nonalcohol
+package ua.ivanzav.coctailsappandroid.ui.screens.pages.alcohol
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -10,26 +10,26 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.launch
+import okio.IOException
 import ua.ivanzav.coctailsappandroid.CocktailsApplication
 import ua.ivanzav.coctailsappandroid.data.repository.CocktailsAppRepository
 import ua.ivanzav.coctailsappandroid.ui.navigation.CocktailsAppUiState
 import ua.ivanzav.coctailsappandroid.ui.navigation.CocktailsPage
-import java.io.IOException
 
-class NonAlcoholViewModel(private val cocktailsAppRepository: CocktailsAppRepository) : ViewModel() {
-    var nonAlcoholUiState: CocktailsAppUiState by mutableStateOf(CocktailsAppUiState.Loading)
+class AlcoholViewModel(private val cocktailsAppRepository: CocktailsAppRepository) : ViewModel() {
+    var alcoholUiState : CocktailsAppUiState by mutableStateOf(CocktailsAppUiState.Loading)
         private set
 
     init {
-        getNonAlcoholicCocktailModels()
+        getAlcoholCocktailModels()
     }
 
-    fun getNonAlcoholicCocktailModels() {
+    fun getAlcoholCocktailModels() {
         viewModelScope.launch {
-            nonAlcoholUiState = try {
-                val response = cocktailsAppRepository.getNonAlcoholCocktailsModels()
+            alcoholUiState = try {
+                val response = cocktailsAppRepository.getAlcoholCocktailModels()
                 val listResult = response.drinks
-                CocktailsAppUiState.Success(listResult, CocktailsPage.NONALCOHOL)
+                CocktailsAppUiState.Success(listResult, CocktailsPage.ALCOHOL)
             } catch (e: IOException) {
                 CocktailsAppUiState.Error
             }
@@ -41,7 +41,7 @@ class NonAlcoholViewModel(private val cocktailsAppRepository: CocktailsAppReposi
             initializer {
                 val application = (this[APPLICATION_KEY] as CocktailsApplication)
                 val cocktailsAppRepository = application.container.cocktailsAppRepository
-                NonAlcoholViewModel(cocktailsAppRepository = cocktailsAppRepository)
+                AlcoholViewModel(cocktailsAppRepository = cocktailsAppRepository)
             }
         }
     }

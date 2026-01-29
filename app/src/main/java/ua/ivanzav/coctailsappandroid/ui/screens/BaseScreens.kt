@@ -20,9 +20,12 @@ import androidx.compose.ui.unit.dp
 import ua.ivanzav.coctailsappandroid.R
 import ua.ivanzav.coctailsappandroid.ui.navigation.CocktailsAppUiState
 import ua.ivanzav.coctailsappandroid.ui.navigation.CocktailsPage
-import ua.ivanzav.coctailsappandroid.ui.screens.alcohol.AlcoholCocktailsScreen
-import ua.ivanzav.coctailsappandroid.ui.screens.nonalcohol.NonAlcoholCocktailsScreen
+import ua.ivanzav.coctailsappandroid.ui.screens.pages.alcohol.AlcoholCocktailsScreen
+import ua.ivanzav.coctailsappandroid.ui.screens.pages.nonalcohol.NonAlcoholCocktailsScreen
 import androidx.compose.material3.LoadingIndicator
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun BaseScreen (
@@ -30,23 +33,27 @@ fun BaseScreen (
     retryAction: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+
     when (cocktailsAppUiState) {
         is CocktailsAppUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
         is CocktailsAppUiState.Success ->
             when {
-                cocktailsAppUiState.page == CocktailsPage.ALCOHOL -> AlcoholCocktailsScreen(
-                    cocktailsAppUiState.cocktailModels, modifier = modifier.fillMaxWidth()
-                )
-                cocktailsAppUiState.page == CocktailsPage.NONALCOHOL -> NonAlcoholCocktailsScreen(
-                    cocktailsAppUiState.cocktailModels, modifier = modifier.fillMaxWidth()
-                )
+                cocktailsAppUiState.page == CocktailsPage.ALCOHOL ->
+                    AlcoholCocktailsScreen(
+                        cocktailsAppUiState.cocktailModels,
+                        modifier = modifier.fillMaxWidth()
+                    )
+                cocktailsAppUiState.page == CocktailsPage.NONALCOHOL ->
+                    NonAlcoholCocktailsScreen(
+                        cocktailsAppUiState.cocktailModels,
+                        modifier = modifier.fillMaxWidth()
+                    )
             }
         is CocktailsAppUiState.Error -> ErrorScreen(retryAction ,modifier = modifier.fillMaxSize())
     }
 }
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
-@Preview(showBackground =  true)
 @Composable
 fun LoadingScreen(modifier: Modifier = Modifier) {
     Box(

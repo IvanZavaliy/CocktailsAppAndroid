@@ -1,4 +1,4 @@
-package ua.ivanzav.coctailsappandroid.ui.components
+package ua.ivanzav.coctailsappandroid.ui.screens.cocktail
 
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.SharedTransitionScope
@@ -7,13 +7,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
@@ -30,29 +29,29 @@ import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
-import ua.ivanzav.coctailsappandroid.data.model.CocktailModelJson
+import ua.ivanzav.coctailsappandroid.data.model.CocktailDataJson
 
 @OptIn(ExperimentalGlideComposeApi::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun SharedTransitionScope.CocktailCard(
-    cocktailModel: CocktailModelJson,
+fun SharedTransitionScope.CocktailDetailScreen(
+    /*cocktailModel: CocktailDataJson,*/
+    imageUrl: String,
+    labelText: String,
     animatedVisibilityScope: AnimatedVisibilityScope,
-    modifier: Modifier = Modifier) {
+    modifier: Modifier = Modifier
+) {
 
-    Card(
-        shape = RoundedCornerShape(30.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color(0xFF252525)
-        ),
-        elevation = CardDefaults.cardElevation(6.dp),
-        modifier = modifier
-            .fillMaxWidth()
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFF252525)),
     ) {
-        Column{
+        Column {
             Surface(
                 modifier = modifier
+                    .padding(16.dp)
                     .sharedElement(
-                        sharedContentState = rememberSharedContentState(key = "image/${cocktailModel.image}"),
+                        sharedContentState = rememberSharedContentState(key = "image/$imageUrl"),
                         animatedVisibilityScope = animatedVisibilityScope,
                         boundsTransform = { _, _ ->
                             tween(durationMillis = 500)
@@ -70,11 +69,11 @@ fun SharedTransitionScope.CocktailCard(
                         contentAlignment = Alignment.Center
                     ) {
                         GlideImage(
-                            model = cocktailModel.image,
+                            model = imageUrl,
                             contentDescription = "",
                             loading = placeholder {
                                 LoadingIndicator(
-                                    modifier = Modifier
+                                    modifier = modifier
                                         .padding(50.dp)
                                         .fillMaxSize()) },
                             contentScale = ContentScale.Crop,
@@ -84,28 +83,21 @@ fun SharedTransitionScope.CocktailCard(
                     }
                 }
             }
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            ){
-                Text(
-                    text = cocktailModel.name,
-                    minLines = 2,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White,
-                    modifier = modifier
-                        .sharedElement(
-                            sharedContentState = rememberSharedContentState(key = "text/${cocktailModel.name}"),
-                            animatedVisibilityScope = animatedVisibilityScope,
-                            boundsTransform = { _, _ ->
-                                tween(durationMillis = 500)
-                            }
-                        )
-                )
-            }
+            Spacer(Modifier.padding(16.dp))
+            Text(
+                text = labelText,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+                modifier = modifier
+                    .sharedElement(
+                        sharedContentState = rememberSharedContentState(key = "text/$labelText"),
+                        animatedVisibilityScope = animatedVisibilityScope,
+                        boundsTransform = { _, _ ->
+                            tween(durationMillis = 500)
+                        }
+                    )
+            )
         }
     }
 }

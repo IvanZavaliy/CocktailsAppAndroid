@@ -1,0 +1,108 @@
+package ua.ivanzav.coctailsappandroid.ui.screens.pages.alcohol
+
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import ua.ivanzav.coctailsappandroid.data.model.CocktailModelJson
+import ua.ivanzav.coctailsappandroid.ui.components.CocktailCard
+import ua.ivanzav.coctailsappandroid.ui.screens.cocktail.CocktailDetailScreen
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
+
+@Composable
+fun AlcoholCocktailsScreen(
+    cocktailModels: List<CocktailModelJson>,
+    modifier: Modifier = Modifier
+) {
+    SharedTransitionLayout {
+        val navController = rememberNavController()
+
+        NavHost(
+            navController = navController,
+            startDestination = "list"
+        ) {
+            composable("list") {
+                AlcoholCocktailsScreenContent(
+                    cocktailModels = cocktailModels,
+                    onItemClick = { image, text ->
+                        val encodedUrl = URLEncoder.encode(image, StandardCharsets.UTF_8.toString())
+
+                        navController.navigate("detail/$encodedUrl/$text")
+                    },
+                    animatedVisibilityScope = this,
+                    modifier = modifier
+                )
+            }
+            composable(
+                route = "detail/{image}/{text}",
+                arguments = listOf(
+                    navArgument("image") {
+                        type = NavType.StringType
+                    },
+                    navArgument("text") {
+                        type = NavType.StringType
+                    }
+                )
+            ) {
+                val image = it.arguments?.getString("image") ?: ""
+                val text = it.arguments?.getString("text") ?: ""
+
+                CocktailDetailScreen(
+                    imageUrl = image,
+                    labelText = text,
+                    animatedVisibilityScope = this
+                )
+            }
+        }
+    }
+
+
+}
+@Composable
+fun SharedTransitionScope.AlcoholCocktailsScreenContent(
+    cocktailModels: List<CocktailModelJson>,
+    animatedVisibilityScope: AnimatedVisibilityScope,
+    onItemClick: (String, String) -> Unit,
+    modifier: Modifier = Modifier
+){
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(4.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            modifier = Modifier
+                .fillMaxSize(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            items(items = cocktailModels, key = {model -> model.id}) { model ->
+                CocktailCard(
+                    model,
+                    animatedVisibilityScope = animatedVisibilityScope,
+                    modifier = Modifier
+                        .clickable { onItemClick(model.image, model.name) }
+                )
+            }
+        }
+    }
+}

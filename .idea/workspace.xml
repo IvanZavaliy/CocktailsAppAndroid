@@ -11,14 +11,21 @@
   <component name="ChangeListManager">
     <list default="true" id="39add012-fbb0-4211-8101-f2983359b215" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.gradle/9.1.0/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.1.0/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/9.1.0/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.1.0/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/9.1.0/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.1.0/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/data/api/NonAlcoholCocktailApiService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/data/api/CocktailAppContainer.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/data/model/CocktailModelJson.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/data/model/CocktailsModelJson.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/data/repository/CocktailsAppRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/data/repository/CocktailsAppRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/di/AlcoholCocktailApiService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/di/AlcoholCocktailApiService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/di/NonAlcoholApiService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/di/NonAlcoholApiService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/components/CardImageUiState.kt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/components/CocktailCard.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/components/CocktailCard.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/navigation/NavigationBarCompose.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/navigation/NavigationBarCompose.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/alcohol/AlcoholViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/alcohol/AlcoholViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/nonalcohol/NonAlcoholViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/nonalcohol/NonAlcoholViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/components/CocktailCardViewModel.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/BaseScreens.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/BaseScreens.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/pages/alcohol/AlcoholScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/pages/alcohol/AlcoholScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/libs.versions.toml" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/libs.versions.toml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,11 +61,11 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Kotlin Data Class" />
         <option value="Kotlin Enum" />
-        <option value="Kotlin File" />
         <option value="Kotlin Interface" />
         <option value="Kotlin Class" />
+        <option value="Kotlin File" />
+        <option value="Kotlin Data Class" />
       </list>
     </option>
   </component>
@@ -90,6 +97,11 @@
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="K2MoveDeclarationsDialog.RECENT_PACKAGE_KEY">
+      <recent name="ua.ivanzav.coctailsappandroid.ui.screens.pages.alcohol" />
+    </key>
+  </component>
   <component name="RunManager" selected="Android App.app">
     <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
       <module name="CoctailsAppAndroid.app" />
@@ -257,12 +269,12 @@
       <map>
         <entry key="ua.ivanzav.coctailsappandroid">
           <value>
-            <CheckInfo lastCheckTimestamp="1769365457620" />
+            <CheckInfo lastCheckTimestamp="1769717375002" />
           </value>
         </entry>
         <entry key="ua.ivanzav.coctailsappandroid.test">
           <value>
-            <CheckInfo lastCheckTimestamp="1769365457620" />
+            <CheckInfo lastCheckTimestamp="1769717375001" />
           </value>
         </entry>
       </map>

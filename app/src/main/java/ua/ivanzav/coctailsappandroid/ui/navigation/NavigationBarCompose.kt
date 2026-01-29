@@ -12,7 +12,6 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -23,8 +22,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 import ua.ivanzav.coctailsappandroid.ui.screens.BaseScreen
-import ua.ivanzav.coctailsappandroid.ui.screens.alcohol.AlcoholViewModel
-import ua.ivanzav.coctailsappandroid.ui.screens.nonalcohol.NonAlcoholViewModel
+import ua.ivanzav.coctailsappandroid.ui.screens.pages.alcohol.AlcoholViewModel
+import ua.ivanzav.coctailsappandroid.ui.screens.pages.nonalcohol.NonAlcoholViewModel
 
 @Preview(showBackground = true)
 @Composable
@@ -72,20 +71,12 @@ fun AppPagerHost(
         state = pagerState,
         modifier = modifier.fillMaxSize()
     ) { pageIndex ->
-        val isVisible = pagerState.currentPage == pageIndex
-
         when (BottomNavItems.entries[pageIndex]) {
             BottomNavItems.ALCOHOL ->
             {
                 val alcoholViewModel: AlcoholViewModel = viewModel(
                     factory = AlcoholViewModel.Factory
                 )
-
-                LaunchedEffect(isVisible) {
-                    if (isVisible) {
-                        alcoholViewModel.getAlcoholCocktailModels()
-                    }
-                }
 
                 BaseScreen(
                     cocktailsAppUiState = alcoholViewModel.alcoholUiState,
@@ -97,12 +88,6 @@ fun AppPagerHost(
                 val nonAlcoholViewModel: NonAlcoholViewModel = viewModel(
                     factory = NonAlcoholViewModel.Factory
                 )
-
-                LaunchedEffect(isVisible) {
-                    if (isVisible) {
-                        nonAlcoholViewModel.getNonAlcoholicCocktailModels()
-                    }
-                }
 
                 BaseScreen(
                     cocktailsAppUiState =  nonAlcoholViewModel.nonAlcoholUiState,
