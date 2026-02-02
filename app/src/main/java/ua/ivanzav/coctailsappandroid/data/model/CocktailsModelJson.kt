@@ -5,11 +5,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CocktailsResponse(
-    val drinks: List<CocktailModelJson>
+    val drinks: List<CocktailsModelJson>
 )
 
 @Serializable
-data class CocktailModelJson(
+data class CocktailsModelJson(
     @SerialName("strDrink")
     val name: String,
 

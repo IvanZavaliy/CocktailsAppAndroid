@@ -5,7 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CocktailDataResponse(
-    val drink: CocktailDataJson
+    @SerialName("drinks")
+    val drink: List<CocktailDataJson>
 )
 
 @Serializable

@@ -20,7 +20,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import ua.ivanzav.coctailsappandroid.data.model.CocktailModelJson
+import ua.ivanzav.coctailsappandroid.data.model.CocktailsModelJson
 import ua.ivanzav.coctailsappandroid.ui.components.CocktailCard
 import ua.ivanzav.coctailsappandroid.ui.screens.cocktail.CocktailDetailScreen
 import java.net.URLEncoder
@@ -28,7 +28,7 @@ import java.nio.charset.StandardCharsets
 
 @Composable
 fun AlcoholCocktailsScreen(
-    cocktailModels: List<CocktailModelJson>,
+    cocktailModels: List<CocktailsModelJson>,
     modifier: Modifier = Modifier
 ) {
     SharedTransitionLayout {
@@ -41,32 +41,37 @@ fun AlcoholCocktailsScreen(
             composable("list") {
                 AlcoholCocktailsScreenContent(
                     cocktailModels = cocktailModels,
-                    onItemClick = { image, text ->
+                    onItemClick = { image, text, id ->
                         val encodedUrl = URLEncoder.encode(image, StandardCharsets.UTF_8.toString())
 
-                        navController.navigate("detail/$encodedUrl/$text")
+                        navController.navigate("detail/$encodedUrl/$text/$id")
                     },
                     animatedVisibilityScope = this,
                     modifier = modifier
                 )
             }
             composable(
-                route = "detail/{image}/{text}",
+                route = "detail/{image}/{text}/{id}",
                 arguments = listOf(
                     navArgument("image") {
                         type = NavType.StringType
                     },
                     navArgument("text") {
                         type = NavType.StringType
+                    },
+                    navArgument("id") {
+                        type = NavType.StringType
                     }
                 )
             ) {
                 val image = it.arguments?.getString("image") ?: ""
                 val text = it.arguments?.getString("text") ?: ""
+                val drinkId = it.arguments?.getString("id") ?: ""
 
                 CocktailDetailScreen(
                     imageUrl = image,
                     labelText = text,
+                    drinkId = drinkId,
                     animatedVisibilityScope = this
                 )
             }
@@ -77,9 +82,9 @@ fun AlcoholCocktailsScreen(
 }
 @Composable
 fun SharedTransitionScope.AlcoholCocktailsScreenContent(
-    cocktailModels: List<CocktailModelJson>,
+    cocktailModels: List<CocktailsModelJson>,
     animatedVisibilityScope: AnimatedVisibilityScope,
-    onItemClick: (String, String) -> Unit,
+    onItemClick: (String, String, String) -> Unit,
     modifier: Modifier = Modifier
 ){
     Box(
@@ -100,7 +105,7 @@ fun SharedTransitionScope.AlcoholCocktailsScreenContent(
                     model,
                     animatedVisibilityScope = animatedVisibilityScope,
                     modifier = Modifier
-                        .clickable { onItemClick(model.image, model.name) }
+                        .clickable { onItemClick(model.image, model.name, model.id) }
                 )
             }
         }

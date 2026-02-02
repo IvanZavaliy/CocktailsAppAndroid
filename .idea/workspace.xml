@@ -15,17 +15,15 @@
       <change beforePath="$PROJECT_DIR$/.gradle/9.1.0/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.1.0/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/data/model/CocktailModelJson.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/data/model/CocktailsModelJson.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/data/api/CocktailAppContainer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/data/api/CocktailAppContainer.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/data/model/CocktailDataJson.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/data/model/CocktailDataJson.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/data/model/CocktailsModelJson.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/data/model/CocktailsModelJson.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/data/repository/CocktailsAppRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/data/repository/CocktailsAppRepository.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/di/AlcoholCocktailApiService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/di/AlcoholCocktailApiService.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/di/NonAlcoholApiService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/di/NonAlcoholApiService.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/components/CardImageUiState.kt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/components/CocktailCard.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/components/CocktailCard.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/components/CocktailCardViewModel.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/BaseScreens.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/BaseScreens.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/navigation/ScreenPageNav.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/navigation/ScreenPageNav.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/cocktail/CocktailDetailScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/cocktail/CocktailDetailScreen.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/pages/alcohol/AlcoholScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/pages/alcohol/AlcoholScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/libs.versions.toml" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/libs.versions.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/pages/nonalcohol/NonAlcoholScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/pages/nonalcohol/NonAlcoholScreen.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,10 +60,10 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Kotlin Enum" />
-        <option value="Kotlin Interface" />
-        <option value="Kotlin Class" />
         <option value="Kotlin File" />
         <option value="Kotlin Data Class" />
+        <option value="Kotlin Class" />
+        <option value="Kotlin Interface" />
       </list>
     </option>
   </component>
@@ -94,7 +92,8 @@
     &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
     &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.tabs&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -263,6 +262,17 @@
       <updated>1768921716825</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="play_dynamic_filters_status">
     <option name="appIdToCheckInfo">
