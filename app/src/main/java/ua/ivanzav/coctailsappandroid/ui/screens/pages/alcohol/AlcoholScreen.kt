@@ -1,6 +1,7 @@
 package ua.ivanzav.coctailsappandroid.ui.screens.pages.alcohol
 
 import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.clickable
@@ -26,86 +27,36 @@ import ua.ivanzav.coctailsappandroid.ui.screens.cocktail.CocktailDetailScreen
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun AlcoholCocktailsScreen(
+fun SharedTransitionScope.AlcoholCocktailsScreen( // Додаємо Scope як receiver
     cocktailModels: List<CocktailsModelJson>,
+    animatedVisibilityScope: AnimatedVisibilityScope, // Потрібно для анімації
+    onItemClick: (String, String, String) -> Unit, // Колбек нагору
     modifier: Modifier = Modifier
 ) {
-    SharedTransitionLayout {
-        val navController = rememberNavController()
-
-        NavHost(
-            navController = navController,
-            startDestination = "list"
-        ) {
-            composable("list") {
-                AlcoholCocktailsScreenContent(
-                    cocktailModels = cocktailModels,
-                    onItemClick = { image, text, id ->
-                        val encodedUrl = URLEncoder.encode(image, StandardCharsets.UTF_8.toString())
-
-                        navController.navigate("detail/$encodedUrl/$text/$id")
-                    },
-                    animatedVisibilityScope = this,
-                    modifier = modifier
-                )
-            }
-            composable(
-                route = "detail/{image}/{text}/{id}",
-                arguments = listOf(
-                    navArgument("image") {
-                        type = NavType.StringType
-                    },
-                    navArgument("text") {
-                        type = NavType.StringType
-                    },
-                    navArgument("id") {
-                        type = NavType.StringType
-                    }
-                )
-            ) {
-                val image = it.arguments?.getString("image") ?: ""
-                val text = it.arguments?.getString("text") ?: ""
-                val drinkId = it.arguments?.getString("id") ?: ""
-
-                CocktailDetailScreen(
-                    imageUrl = image,
-                    labelText = text,
-                    drinkId = drinkId,
-                    animatedVisibilityScope = this
-                )
-            }
-        }
-    }
-
-
-}
-@Composable
-fun SharedTransitionScope.AlcoholCocktailsScreenContent(
-    cocktailModels: List<CocktailsModelJson>,
-    animatedVisibilityScope: AnimatedVisibilityScope,
-    onItemClick: (String, String, String) -> Unit,
-    modifier: Modifier = Modifier
-){
+    // Тут більше немає NavHost! Тільки контент.
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(4.dp),
         contentAlignment = Alignment.Center
     ) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            items(items = cocktailModels, key = {model -> model.id}) { model ->
+            items(items = cocktailModels, key = { model -> model.id }) { model ->
                 CocktailCard(
                     model,
                     animatedVisibilityScope = animatedVisibilityScope,
                     modifier = Modifier
-                        .clickable { onItemClick(model.image, model.name, model.id) }
+                        .clickable {
+                            // Просто передаємо дані нагору
+                            onItemClick(model.image, model.name, model.id)
+                        }
                 )
             }
         }

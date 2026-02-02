@@ -1,5 +1,8 @@
 package ua.ivanzav.coctailsappandroid.ui.screens
 
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,10 +30,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun BaseScreen (
+fun SharedTransitionScope.BaseScreen (
     cocktailsAppUiState: CocktailsAppUiState,
     retryAction: () -> Unit,
+    animatedVisibilityScope: AnimatedVisibilityScope, // 2. Приймаємо scope анімації
+    onItemClick: (String, String, String) -> Unit,    // 3. Приймаємо колбек кліку
     modifier: Modifier = Modifier
 ) {
 
@@ -40,12 +46,16 @@ fun BaseScreen (
             when {
                 cocktailsAppUiState.page == CocktailsPage.ALCOHOL ->
                     AlcoholCocktailsScreen(
-                        cocktailsAppUiState.cocktailModels,
+                        cocktailModels = cocktailsAppUiState.cocktailModels,
+                        animatedVisibilityScope = animatedVisibilityScope,
+                        onItemClick = onItemClick,
                         modifier = modifier.fillMaxWidth()
                     )
                 cocktailsAppUiState.page == CocktailsPage.NONALCOHOL ->
                     NonAlcoholCocktailsScreen(
-                        cocktailsAppUiState.cocktailModels,
+                        cocktailModels = cocktailsAppUiState.cocktailModels,
+                        animatedVisibilityScope = animatedVisibilityScope,
+                        onItemClick = onItemClick,
                         modifier = modifier.fillMaxWidth()
                     )
             }

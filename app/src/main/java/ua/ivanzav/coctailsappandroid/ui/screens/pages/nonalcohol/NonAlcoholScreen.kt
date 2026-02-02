@@ -27,60 +27,7 @@ import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
 @Composable
-fun NonAlcoholCocktailsScreen(
-    cocktailModels: List<CocktailsModelJson>,
-    modifier: Modifier = Modifier
-) {
-    SharedTransitionLayout {
-        val navController = rememberNavController()
-
-        NavHost(
-            navController = navController,
-            startDestination = "list"
-        ) {
-            composable("list") {
-                NonAlcoholCocktailsScreenContent(
-                    cocktailModels = cocktailModels,
-                    onItemClick = { image, text, id ->
-                        val encodedUrl = URLEncoder.encode(image, StandardCharsets.UTF_8.toString())
-
-                        navController.navigate("detail/$encodedUrl/$text/$id")
-                    },
-                    animatedVisibilityScope = this,
-                    modifier = modifier
-                )
-            }
-            composable(
-                route = "detail/{image}/{text}/{id}",
-                arguments = listOf(
-                    navArgument("image") {
-                        type = NavType.StringType
-                    },
-                    navArgument("text") {
-                        type = NavType.StringType
-                    },
-                    navArgument("id") {
-                        type = NavType.StringType
-                    }
-                )
-            ) {
-                val image = it.arguments?.getString("image") ?: ""
-                val text = it.arguments?.getString("text") ?: ""
-                val drinkId = it.arguments?.getString("id") ?: ""
-
-                CocktailDetailScreen(
-                    imageUrl = image,
-                    labelText = text,
-                    drinkId = drinkId,
-                    animatedVisibilityScope = this
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun SharedTransitionScope.NonAlcoholCocktailsScreenContent(
+fun SharedTransitionScope.NonAlcoholCocktailsScreen(
     cocktailModels: List<CocktailsModelJson>,
     animatedVisibilityScope: AnimatedVisibilityScope,
     onItemClick: (String, String, String) -> Unit,

@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,7 +36,6 @@ import ua.ivanzav.coctailsappandroid.data.model.CocktailsModelJson
 @OptIn(ExperimentalGlideComposeApi::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun SharedTransitionScope.CocktailDetailScreen(
-    /*cocktailModel: CocktailDataJson,*/
     imageUrl: String,
     labelText: String,
     drinkId: String,
@@ -70,7 +70,10 @@ fun SharedTransitionScope.CocktailDetailScreen(
             .fillMaxSize()
             .background(Color(0xFF252525)),
     ) {
-        Column {
+        Column(
+            modifier = Modifier
+                .padding(top = 40.dp)
+        ) {
             Surface(
                 modifier = modifier
                     .padding(16.dp)

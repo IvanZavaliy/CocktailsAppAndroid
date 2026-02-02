@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import ua.ivanzav.coctailsappandroid.ui.navigation.NavigationBarApp
+import ua.ivanzav.coctailsappandroid.ui.RootApplication
 import ua.ivanzav.coctailsappandroid.ui.theme.CoctailsAppAndroidTheme
 
 
@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             CoctailsAppAndroidTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    NavigationBarApp()
+                    RootApplication()
                 }
             }
         }

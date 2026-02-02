@@ -1,5 +1,8 @@
 package ua.ivanzav.coctailsappandroid.ui.navigation
 
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
@@ -25,9 +28,13 @@ import ua.ivanzav.coctailsappandroid.ui.screens.BaseScreen
 import ua.ivanzav.coctailsappandroid.ui.screens.pages.alcohol.AlcoholViewModel
 import ua.ivanzav.coctailsappandroid.ui.screens.pages.nonalcohol.NonAlcoholViewModel
 
-@Preview(showBackground = true)
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun NavigationBarApp(modifier: Modifier = Modifier) {
+fun SharedTransitionScope.NavigationBarApp(
+    modifier: Modifier = Modifier,
+    animatedVisibilityScope: AnimatedVisibilityScope,
+    onNavigateToDetail: (String, String, String) -> Unit
+) {
     val pagerState = rememberPagerState(pageCount = {BottomNavItems.entries.size})
     val startDestination = BottomNavItems.ALCOHOL
     var selectedDestination by rememberSaveable { mutableIntStateOf(startDestination.ordinal) }
@@ -58,14 +65,22 @@ fun NavigationBarApp(modifier: Modifier = Modifier) {
             }
         }
     ) { contentPadding ->
-        AppPagerHost(pagerState, modifier = Modifier.padding(contentPadding))
+        AppPagerHost(
+            pagerState = pagerState,
+            modifier = Modifier.padding(contentPadding),
+            animatedVisibilityScope = animatedVisibilityScope, // передаємо далі
+            onNavigateToDetail = onNavigateToDetail // передаємо далі
+        )
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun AppPagerHost(
+fun SharedTransitionScope.AppPagerHost(
     pagerState: PagerState,
-    modifier: Modifier
+    modifier: Modifier,
+    animatedVisibilityScope: AnimatedVisibilityScope,
+    onNavigateToDetail: (String, String, String) -> Unit
 ) {
     HorizontalPager(
         state = pagerState,
@@ -80,7 +95,9 @@ fun AppPagerHost(
 
                 BaseScreen(
                     cocktailsAppUiState = alcoholViewModel.alcoholUiState,
-                    retryAction = alcoholViewModel::getAlcoholCocktailModels
+                    retryAction = alcoholViewModel::getAlcoholCocktailModels,
+                    animatedVisibilityScope = animatedVisibilityScope, // Передаємо
+                    onItemClick = onNavigateToDetail // Передаємо
                 )
             }
             BottomNavItems.NONALCOHOL ->
@@ -90,8 +107,10 @@ fun AppPagerHost(
                 )
 
                 BaseScreen(
-                    cocktailsAppUiState =  nonAlcoholViewModel.nonAlcoholUiState,
-                    retryAction = nonAlcoholViewModel::getNonAlcoholicCocktailModels
+                    cocktailsAppUiState = nonAlcoholViewModel.nonAlcoholUiState,
+                    retryAction = nonAlcoholViewModel::getNonAlcoholicCocktailModels,
+                    animatedVisibilityScope = animatedVisibilityScope, // Передаємо
+                    onItemClick = onNavigateToDetail // Передаємо
                 )
             }
         }
