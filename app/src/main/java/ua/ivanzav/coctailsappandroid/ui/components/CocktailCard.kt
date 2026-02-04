@@ -40,7 +40,7 @@ fun SharedTransitionScope.CocktailCard(
     Card(
         shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFF252525)
+            containerColor = MaterialTheme.colorScheme.surface
         ),
         elevation = CardDefaults.cardElevation(6.dp),
         modifier = modifier
@@ -89,7 +89,7 @@ fun SharedTransitionScope.CocktailCard(
                     minLines = 2,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onBackground,
                     modifier = modifier
                         .sharedElement(
                             sharedContentState = rememberSharedContentState(key = "text/${cocktailModel.name}"),

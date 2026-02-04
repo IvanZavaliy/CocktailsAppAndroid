@@ -13,9 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,11 +23,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.bumptech.glide.integration.compose.placeholder
 import ua.ivanzav.coctailsappandroid.data.model.CocktailDataJson
 import ua.ivanzav.coctailsappandroid.data.model.CocktailsModelJson
 
@@ -45,7 +44,6 @@ fun SharedTransitionScope.CocktailDetailScreen(
     val cocktailDetailViewModel: CocktailDetailViewModel = viewModel(
         factory = CocktailDetailViewModel.Factory
     )
-
     LaunchedEffect(drinkId) {
         cocktailDetailViewModel.getCocktailDetailModel(drinkId)
     }
@@ -53,7 +51,7 @@ fun SharedTransitionScope.CocktailDetailScreen(
     val cocktailDetailUiState = cocktailDetailViewModel.cocktailDetailUiState
     val drink: CocktailDataJson?
 
-    val informationText = when (cocktailDetailUiState) {
+    when (cocktailDetailUiState) {
         is CocktailDetailUiState.Loading -> {
             drink = null
         }
@@ -68,7 +66,7 @@ fun SharedTransitionScope.CocktailDetailScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF252525)),
+            .background(MaterialTheme.colorScheme.surface),
     ) {
         Column(
             modifier = Modifier
@@ -76,7 +74,7 @@ fun SharedTransitionScope.CocktailDetailScreen(
         ) {
             Surface(
                 modifier = modifier
-                    .padding(16.dp)
+                    .padding(16.dp, end = 16.dp, top = 16.dp)
                     .sharedElement(
                         sharedContentState = rememberSharedContentState(key = "image/$imageUrl"),
                         animatedVisibilityScope = animatedVisibilityScope,
@@ -102,32 +100,54 @@ fun SharedTransitionScope.CocktailDetailScreen(
                 }
             }
 
-            Spacer(Modifier.padding(16.dp))
-
-            Text(
-                text = labelText,
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                color = Color.White,
-                modifier = modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-                    .sharedElement(
-                        sharedContentState = rememberSharedContentState(key = "text/$labelText"),
-                        animatedVisibilityScope = animatedVisibilityScope,
-                        boundsTransform = { _, _ ->
-                            tween(durationMillis = 300)
-                        }
+            Column {
+                Column(
+                    modifier = modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = labelText,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontSize = 28.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        modifier = modifier
+                            .padding(top = 16.dp)
+                            .sharedElement(
+                                sharedContentState = rememberSharedContentState(key = "text/$labelText"),
+                                animatedVisibilityScope = animatedVisibilityScope,
+                                boundsTransform = { _, _ ->
+                                    tween(durationMillis = 300)
+                                }
+                            )
                     )
-            )
+                    MainDetailContent(drink, modifier)
+                }
+            }
 
-            Text(
-                text = drink?.strInstructions ?: "Loading",
-                color = Color.White,
-                modifier = modifier
-                    .padding(start = 16.dp, end = 16.dp)
-                    .fillMaxWidth()
-            )
         }
+    }
+}
+
+@Composable
+fun MainDetailContent(drink: CocktailDataJson?, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "${drink?.strCategory} | ${drink?.strGlass}" ?: "Loading",
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = modifier
+                .padding(4.dp)
+        )
+        Text(
+            text = drink?.strInstructions ?: "Loading",
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = modifier
+                .padding(start = 16.dp, end = 16.dp)
+                .fillMaxWidth()
+        )
     }
 }

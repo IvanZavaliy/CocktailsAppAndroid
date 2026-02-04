@@ -12,6 +12,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.launch
 import okio.IOException
 import ua.ivanzav.coctailsappandroid.CocktailsApplication
+import ua.ivanzav.coctailsappandroid.data.model.CocktailsModelJson
 import ua.ivanzav.coctailsappandroid.data.repository.CocktailsAppRepository
 
 class CocktailDetailViewModel(private val cocktailsAppRepository: CocktailsAppRepository) : ViewModel() {

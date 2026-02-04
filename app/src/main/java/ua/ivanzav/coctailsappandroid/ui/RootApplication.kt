@@ -21,20 +21,17 @@ fun RootApplication() {
             navController = navController,
             startDestination = "home"
         ) {
-            // 1. Головний екран з меню (Home)
             composable("home") {
                 NavigationBarApp(
                     animatedVisibilityScope = this,
                     onNavigateToDetail = { url, name, id ->
-                        val encodedUrl = URLEncoder.encode(url, StandardCharsets.UTF_8.toString())
-                        navController.navigate("detail/$encodedUrl/$name/$id")
+                        navController.navigate("detail?image=$url&text=$name&id=$id")
                     }
                 )
             }
 
-            // 2. Екран деталей (тепер він перекриває Home і Menu)
             composable(
-                route = "detail/{image}/{text}/{id}",
+                route = "detail?image={image}&text={text}&id={id}",
                 arguments = listOf(
                     navArgument("image") { type = NavType.StringType },
                     navArgument("text") { type = NavType.StringType },
