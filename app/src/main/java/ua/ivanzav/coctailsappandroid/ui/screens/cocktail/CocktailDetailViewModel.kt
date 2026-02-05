@@ -12,7 +12,6 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.launch
 import okio.IOException
 import ua.ivanzav.coctailsappandroid.CocktailsApplication
-import ua.ivanzav.coctailsappandroid.data.model.CocktailsModelJson
 import ua.ivanzav.coctailsappandroid.data.repository.CocktailsAppRepository
 
 class CocktailDetailViewModel(private val cocktailsAppRepository: CocktailsAppRepository) : ViewModel() {
@@ -23,7 +22,7 @@ class CocktailDetailViewModel(private val cocktailsAppRepository: CocktailsAppRe
         viewModelScope.launch {
             cocktailDetailUiState = try {
                 val response = cocktailsAppRepository.getCocktailDetailModel(cocktailId)
-                val listResult = response.drink.first()
+                val listResult = response.drinks?: emptyList()
                 CocktailDetailUiState.Success(listResult)
             } catch (e: IOException) {
                 CocktailDetailUiState.Error

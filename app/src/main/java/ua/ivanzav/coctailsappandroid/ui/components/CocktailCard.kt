@@ -28,12 +28,12 @@ import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
-import ua.ivanzav.coctailsappandroid.data.model.CocktailsModelJson
+import ua.ivanzav.coctailsappandroid.data.model.CocktailsDataJson
 
 @OptIn(ExperimentalGlideComposeApi::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun SharedTransitionScope.CocktailCard(
-    cocktailModel: CocktailsModelJson,
+    cocktailModel: CocktailsDataJson,
     animatedVisibilityScope: AnimatedVisibilityScope,
     modifier: Modifier = Modifier) {
 

@@ -4,7 +4,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 import ua.ivanzav.coctailsappandroid.data.model.CocktailDetailDataResponse
 
-interface CocktailDetailApiService {
-    @GET("api/json/v1/1/lookup.php")
-    suspend fun getModels(@Query("i") cocktailId: String): CocktailDetailDataResponse
+interface CocktailSearchApiService {
+    @GET("api/json/v1/1/search.php")
+    suspend fun searchCocktails(@Query("s") query: String) : CocktailDetailDataResponse
 }

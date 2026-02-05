@@ -8,6 +8,7 @@ import ua.ivanzav.coctailsappandroid.data.repository.CocktailsAppRepository
 import ua.ivanzav.coctailsappandroid.data.repository.NetworkCocktailsAppRepository
 import ua.ivanzav.coctailsappandroid.di.AlcoholCocktailApiService
 import ua.ivanzav.coctailsappandroid.di.CocktailDetailApiService
+import ua.ivanzav.coctailsappandroid.di.CocktailSearchApiService
 import ua.ivanzav.coctailsappandroid.di.NonAlcoholCocktailApiService
 
 interface CocktailAppContainer {
@@ -18,9 +19,9 @@ class DefaultCocktailAppContainer : CocktailAppContainer {
     private val baseUrl = "https://thecocktaildb.com"
 
     private val jsonConfig = Json {
-        ignoreUnknownKeys = true // Ігнорує поля, яких немає в моделі (Critical!)
-        coerceInputValues = true // Замінює null на дефолтні значення, якщо є
-        isLenient = true // Дозволяє трохи "неправильний" JSON
+        ignoreUnknownKeys = true
+        coerceInputValues = true
+        isLenient = true
     }
 
     private val retrofit = Retrofit.Builder()
@@ -40,11 +41,16 @@ class DefaultCocktailAppContainer : CocktailAppContainer {
         retrofit.create(CocktailDetailApiService::class.java)
     }
 
+    private val retrofitCocktailSearchService: CocktailSearchApiService by lazy {
+        retrofit.create(CocktailSearchApiService::class.java)
+    }
+
     override val cocktailsAppRepository: CocktailsAppRepository by lazy {
         NetworkCocktailsAppRepository(
             retrofitAlcoCocktailService,
             retrofitNonAlcoCocktailService,
-            retrofitCocktailDetailService
+            retrofitCocktailDetailService,
+            retrofitCocktailSearchService
         )
     }
 }

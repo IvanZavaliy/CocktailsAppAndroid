@@ -4,12 +4,12 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CocktailsResponse(
-    val drinks: List<CocktailsModelJson>
+data class CocktailsDataResponse(
+    val drinks: List<CocktailsDataJson>
 )
 
 @Serializable
-data class CocktailsModelJson(
+data class CocktailsDataJson(
     @SerialName("strDrink")
     val name: String,
 

@@ -1,7 +1,6 @@
 package ua.ivanzav.coctailsappandroid.ui.screens.pages.nonalcohol
 
 import androidx.compose.animation.AnimatedVisibilityScope
-import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,20 +14,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
-import ua.ivanzav.coctailsappandroid.data.model.CocktailsModelJson
+import ua.ivanzav.coctailsappandroid.data.model.CocktailsDataJson
 import ua.ivanzav.coctailsappandroid.ui.components.CocktailCard
-import ua.ivanzav.coctailsappandroid.ui.screens.cocktail.CocktailDetailScreen
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 
 @Composable
 fun SharedTransitionScope.NonAlcoholCocktailsScreen(
-    cocktailModels: List<CocktailsModelJson>,
+    cocktailModels: List<CocktailsDataJson>,
     animatedVisibilityScope: AnimatedVisibilityScope,
     onItemClick: (String, String, String) -> Unit,
     modifier: Modifier = Modifier

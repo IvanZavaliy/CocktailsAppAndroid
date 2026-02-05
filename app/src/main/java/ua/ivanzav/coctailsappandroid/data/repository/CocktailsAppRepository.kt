@@ -1,28 +1,34 @@
 package ua.ivanzav.coctailsappandroid.data.repository
 
-import ua.ivanzav.coctailsappandroid.data.model.CocktailDataResponse
-import ua.ivanzav.coctailsappandroid.data.model.CocktailsResponse
+import ua.ivanzav.coctailsappandroid.data.model.CocktailDetailDataResponse
+import ua.ivanzav.coctailsappandroid.data.model.CocktailsDataResponse
 import ua.ivanzav.coctailsappandroid.di.AlcoholCocktailApiService
 import ua.ivanzav.coctailsappandroid.di.CocktailDetailApiService
+import ua.ivanzav.coctailsappandroid.di.CocktailSearchApiService
 import ua.ivanzav.coctailsappandroid.di.NonAlcoholCocktailApiService
 
 interface CocktailsAppRepository {
 
-    suspend fun getAlcoholCocktailModels(): CocktailsResponse
+    suspend fun getAlcoholCocktailModels(): CocktailsDataResponse
 
-    suspend fun getNonAlcoholCocktailsModels(): CocktailsResponse
+    suspend fun getNonAlcoholCocktailsModels(): CocktailsDataResponse
 
-    suspend fun getCocktailDetailModel(id: String): CocktailDataResponse
+    suspend fun getCocktailDetailModel(id: String): CocktailDetailDataResponse
+
+    suspend fun searchCocktails(query: String): CocktailDetailDataResponse
 }
 
 class NetworkCocktailsAppRepository(
     private val alcoholCocktailApiService: AlcoholCocktailApiService,
     private val nonAlcoholCocktailApiService: NonAlcoholCocktailApiService,
-    private val cocktailDetailApiService: CocktailDetailApiService
+    private val cocktailDetailApiService: CocktailDetailApiService,
+    private val cocktailSearchApiService: CocktailSearchApiService
 ) : CocktailsAppRepository {
-    override suspend fun getAlcoholCocktailModels(): CocktailsResponse = alcoholCocktailApiService.getModels()
+    override suspend fun getAlcoholCocktailModels(): CocktailsDataResponse = alcoholCocktailApiService.getModels()
 
-    override suspend fun getNonAlcoholCocktailsModels(): CocktailsResponse = nonAlcoholCocktailApiService.getModels()
+    override suspend fun getNonAlcoholCocktailsModels(): CocktailsDataResponse = nonAlcoholCocktailApiService.getModels()
 
-    override suspend fun getCocktailDetailModel(id: String): CocktailDataResponse = cocktailDetailApiService.getModels(id)
+    override suspend fun getCocktailDetailModel(id: String): CocktailDetailDataResponse = cocktailDetailApiService.getModels(id)
+
+    override suspend fun searchCocktails(query: String): CocktailDetailDataResponse = cocktailSearchApiService.searchCocktails(query)
 }
