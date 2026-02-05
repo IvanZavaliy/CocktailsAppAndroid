@@ -135,4 +135,24 @@ data class CocktailDataJson(
 
     @SerialName("dateModified")
     val dateModified: String?
-)
+) {
+    fun getListOfIngredientsAndMeasures(): List<Pair<String, String?>> {
+        return listOfNotNull(
+            strIngredient1?.let { it to strMeasure1 },
+            strIngredient2?.let { it to strMeasure2 },
+            strIngredient3?.let { it to strMeasure3 },
+            strIngredient4?.let { it to strMeasure4 },
+            strIngredient5?.let { it to strMeasure5 },
+            strIngredient6?.let { it to strMeasure6 },
+            strIngredient7?.let { it to strMeasure7 },
+            strIngredient8?.let { it to strMeasure8 },
+            strIngredient9?.let { it to strMeasure9 },
+            strIngredient10?.let { it to strMeasure10 },
+            strIngredient11?.let { it to strMeasure11 },
+            strIngredient12?.let { it to strMeasure12 },
+            strIngredient13?.let { it to strMeasure13 },
+            strIngredient14?.let { it to strMeasure14 },
+            strIngredient15?.let { it to strMeasure15 }
+        )
+    }
+}

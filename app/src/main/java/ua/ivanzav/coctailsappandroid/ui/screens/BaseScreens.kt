@@ -35,8 +35,8 @@ import androidx.navigation.compose.rememberNavController
 fun SharedTransitionScope.BaseScreen (
     cocktailsAppUiState: CocktailsAppUiState,
     retryAction: () -> Unit,
-    animatedVisibilityScope: AnimatedVisibilityScope, // 2. Приймаємо scope анімації
-    onItemClick: (String, String, String) -> Unit,    // 3. Приймаємо колбек кліку
+    animatedVisibilityScope: AnimatedVisibilityScope,
+    onItemClick: (String, String, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -83,7 +83,8 @@ fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_launcher_foreground), contentDescription = ""
+            painter = painterResource(id = R.drawable.ic_launcher_foreground),
+            contentDescription = ""
         )
         Text(text = "Filed to load", modifier = Modifier.padding(16.dp))
         Button(onClick = retryAction) {

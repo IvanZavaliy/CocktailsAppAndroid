@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import ua.ivanzav.coctailsappandroid.ui.RootApplication
-import ua.ivanzav.coctailsappandroid.ui.theme.CoctailsAppAndroidTheme
+import ua.ivanzav.coctailsappandroid.ui.theme.CocktailsAppAndroidTheme
 
 
 class MainActivity : ComponentActivity() {
@@ -16,7 +16,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            CoctailsAppAndroidTheme {
+            CocktailsAppAndroidTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     RootApplication()
                 }

@@ -29,13 +29,12 @@ import java.nio.charset.StandardCharsets
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun SharedTransitionScope.AlcoholCocktailsScreen( // Додаємо Scope як receiver
+fun SharedTransitionScope.AlcoholCocktailsScreen(
     cocktailModels: List<CocktailsModelJson>,
-    animatedVisibilityScope: AnimatedVisibilityScope, // Потрібно для анімації
-    onItemClick: (String, String, String) -> Unit, // Колбек нагору
+    animatedVisibilityScope: AnimatedVisibilityScope,
+    onItemClick: (String, String, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // Тут більше немає NavHost! Тільки контент.
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -54,7 +53,6 @@ fun SharedTransitionScope.AlcoholCocktailsScreen( // Додаємо Scope як r
                     animatedVisibilityScope = animatedVisibilityScope,
                     modifier = Modifier
                         .clickable {
-                            // Просто передаємо дані нагору
                             onItemClick(model.image, model.name, model.id)
                         }
                 )

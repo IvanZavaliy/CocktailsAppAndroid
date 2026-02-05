@@ -68,8 +68,8 @@ fun SharedTransitionScope.NavigationBarApp(
         AppPagerHost(
             pagerState = pagerState,
             modifier = Modifier.padding(contentPadding),
-            animatedVisibilityScope = animatedVisibilityScope, // передаємо далі
-            onNavigateToDetail = onNavigateToDetail // передаємо далі
+            animatedVisibilityScope = animatedVisibilityScope,
+            onNavigateToDetail = onNavigateToDetail
         )
     }
 }
@@ -96,8 +96,8 @@ fun SharedTransitionScope.AppPagerHost(
                 BaseScreen(
                     cocktailsAppUiState = alcoholViewModel.alcoholUiState,
                     retryAction = alcoholViewModel::getAlcoholCocktailModels,
-                    animatedVisibilityScope = animatedVisibilityScope, // Передаємо
-                    onItemClick = onNavigateToDetail // Передаємо
+                    animatedVisibilityScope = animatedVisibilityScope,
+                    onItemClick = onNavigateToDetail
                 )
             }
             BottomNavItems.NONALCOHOL ->
@@ -109,8 +109,8 @@ fun SharedTransitionScope.AppPagerHost(
                 BaseScreen(
                     cocktailsAppUiState = nonAlcoholViewModel.nonAlcoholUiState,
                     retryAction = nonAlcoholViewModel::getNonAlcoholicCocktailModels,
-                    animatedVisibilityScope = animatedVisibilityScope, // Передаємо
-                    onItemClick = onNavigateToDetail // Передаємо
+                    animatedVisibilityScope = animatedVisibilityScope,
+                    onItemClick = onNavigateToDetail
                 )
             }
         }
