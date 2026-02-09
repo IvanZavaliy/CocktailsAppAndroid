@@ -46,7 +46,10 @@ fun RootApplication() {
                     imageUrl = image,
                     labelText = text,
                     drinkId = drinkId,
-                    animatedVisibilityScope = this
+                    animatedVisibilityScope = this,
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
                 )
             }
         }

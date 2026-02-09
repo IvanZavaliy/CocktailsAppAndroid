@@ -10,12 +10,18 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -43,6 +49,7 @@ fun SharedTransitionScope.CocktailDetailScreen(
     labelText: String,
     drinkId: String,
     animatedVisibilityScope: AnimatedVisibilityScope,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val cocktailDetailViewModel: CocktailDetailViewModel = viewModel(
@@ -56,72 +63,88 @@ fun SharedTransitionScope.CocktailDetailScreen(
 
     Box(
         modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surface)
-            .verticalScroll(rememberScrollState()),
+        .fillMaxSize()
+        .background(MaterialTheme.colorScheme.surface)
+        .navigationBarsPadding()
     ) {
-        Column(
+        Box(
             modifier = Modifier
-                .padding(top = 40.dp)
+                .verticalScroll(rememberScrollState()),
         ) {
-            Surface(
-                modifier = modifier
-                    .padding(16.dp, end = 16.dp, top = 16.dp)
-                    .sharedElement(
-                        sharedContentState = rememberSharedContentState(key = "image/$imageUrl"),
-                        animatedVisibilityScope = animatedVisibilityScope,
-                        boundsTransform = { _, _ ->
-                            tween(durationMillis = 300)
-                        }
-                    ),
-                shape = RoundedCornerShape(30.dp)
+            Column(
+                modifier = Modifier
+                    .padding(top = 40.dp)
             ) {
-                Box(
+                Surface(
                     modifier = modifier
-                        .fillMaxWidth(1f)
-                        .aspectRatio(1f),
-                    contentAlignment = Alignment.Center
+                        .padding(16.dp, end = 16.dp, top = 16.dp)
+                        .sharedElement(
+                            sharedContentState = rememberSharedContentState(key = "image/$imageUrl"),
+                            animatedVisibilityScope = animatedVisibilityScope,
+                            boundsTransform = { _, _ ->
+                                tween(durationMillis = 300)
+                            }
+                        ),
+                    shape = RoundedCornerShape(30.dp)
                 ) {
-                    GlideImage(
-                        model = imageUrl,
-                        contentDescription = "",
-                        contentScale = ContentScale.Crop,
+                    Box(
                         modifier = modifier
-                            .background(color = MaterialTheme.colorScheme.surface)
-                    )
+                            .fillMaxWidth(1f)
+                            .aspectRatio(1f),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        GlideImage(
+                            model = imageUrl,
+                            contentDescription = "",
+                            contentScale = ContentScale.Crop,
+                            modifier = modifier
+                                .background(color = MaterialTheme.colorScheme.surface)
+                        )
+                    }
                 }
-            }
 
-            Column {
-                Column(
-                    modifier = modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = labelText,
-                        style = MaterialTheme.typography.titleLarge,
-                        fontSize = 28.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        modifier = modifier
-                            .padding(top = 16.dp)
-                            .sharedElement(
-                                sharedContentState = rememberSharedContentState(key = "text/$labelText"),
-                                animatedVisibilityScope = animatedVisibilityScope,
-                                boundsTransform = { _, _ ->
-                                    tween(durationMillis = 300)
-                                }
-                            )
-                    )
+                Column {
+                    Column(
+                        modifier = modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = labelText,
+                            style = MaterialTheme.typography.titleLarge,
+                            fontSize = 28.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            modifier = modifier
+                                .padding(top = 16.dp)
+                                .sharedElement(
+                                    sharedContentState = rememberSharedContentState(key = "text/$labelText"),
+                                    animatedVisibilityScope = animatedVisibilityScope,
+                                    boundsTransform = { _, _ ->
+                                        tween(durationMillis = 300)
+                                    }
+                                )
+                        )
 
-                    when(cocktailDetailUiState){
-                        is CocktailDetailUiState.Loading -> ContentLoading()
-                        is CocktailDetailUiState.Success -> MainDetailContent(cocktailDetailUiState.cocktailModelJson.first())
-                        is CocktailDetailUiState.Error -> ContentError()
+                        when(cocktailDetailUiState){
+                            is CocktailDetailUiState.Loading -> ContentLoading()
+                            is CocktailDetailUiState.Success -> MainDetailContent(cocktailDetailUiState.cocktailModelJson.first())
+                            is CocktailDetailUiState.Error -> ContentError()
+                        }
                     }
                 }
             }
-
+        }
+        FloatingActionButton(
+            onClick = onBackClick,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(end = 12.dp)
+                .navigationBarsPadding()
+        ) {
+            Icon(
+                imageVector = Icons.Default.ChevronLeft,
+                contentDescription = "Go Back"
+            )
         }
     }
 }
