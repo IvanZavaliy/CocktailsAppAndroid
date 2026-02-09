@@ -152,7 +152,10 @@ fun MainDetailContent(drink: CocktailDetailDataJson, modifier: Modifier = Modifi
                 .padding(start = 16.dp, top = 8.dp, bottom = 8.dp)
                 .fillMaxWidth()
         )
-        ingredientsList.forEach { (ingredient, measure) ->
+        ingredientsList.forEach { (ingredient, nullableMeasure) ->
+            val measure: String = if (nullableMeasure == null) ""
+            else "$nullableMeasure "
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -171,7 +174,7 @@ fun MainDetailContent(drink: CocktailDetailDataJson, modifier: Modifier = Modifi
                         .clip(RoundedCornerShape(8.dp)),
                     contentScale = ContentScale.Fit,
                 )
-                Text(text = "$measure $ingredient")
+                Text(text = "$measure$ingredient")
             }
         }
 

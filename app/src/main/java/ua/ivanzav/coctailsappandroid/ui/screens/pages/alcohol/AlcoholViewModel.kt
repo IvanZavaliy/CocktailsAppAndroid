@@ -36,6 +36,34 @@ class AlcoholViewModel(private val cocktailsAppRepository: CocktailsAppRepositor
         }
     }
 
+    fun fetchCocktails(ingredient: String?) {
+        viewModelScope.launch {
+            alcoholUiState = CocktailsAppUiState.Loading // Вмикаємо лоадер
+            try {
+                if (ingredient == null) {
+                    // 1. Якщо фільтру немає - вантажимо стандартний список (Алкогольні)
+                    getAlcoholCocktailModels()
+                    // (для NonAlcoholViewModel тут буде виклик getNonAlcoholicCocktailModels())
+                } else {
+                    // 2. Якщо є інгредієнт - фільтруємо по ньому
+                    val response = cocktailsAppRepository.filterByIngredient(ingredient)
+
+                    // Перетворення спрощеної моделі в CocktailsDataJson (якщо типи відрізняються)
+                    // Якщо filterByIngredient повертає CocktailsDataResponse з CocktailsDataJson, то все ок.
+                    // Якщо повертає деталі, використовуйте мапер.
+                    val drinks = response.drinks ?: emptyList()
+
+                    alcoholUiState = CocktailsAppUiState.Success(
+                        cocktailModels = drinks,
+                        page = CocktailsPage.ALCOHOL
+                    )
+                }
+            } catch (e: Exception) {
+                alcoholUiState = CocktailsAppUiState.Error
+            }
+        }
+    }
+
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {

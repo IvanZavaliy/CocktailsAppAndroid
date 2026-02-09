@@ -9,6 +9,7 @@ import ua.ivanzav.coctailsappandroid.data.repository.NetworkCocktailsAppReposito
 import ua.ivanzav.coctailsappandroid.di.AlcoholCocktailApiService
 import ua.ivanzav.coctailsappandroid.di.CocktailDetailApiService
 import ua.ivanzav.coctailsappandroid.di.CocktailSearchApiService
+import ua.ivanzav.coctailsappandroid.di.IngredientsFilterApiService
 import ua.ivanzav.coctailsappandroid.di.NonAlcoholCocktailApiService
 
 interface CocktailAppContainer {
@@ -45,12 +46,17 @@ class DefaultCocktailAppContainer : CocktailAppContainer {
         retrofit.create(CocktailSearchApiService::class.java)
     }
 
+    private val retrofitIngredientsFilterService: IngredientsFilterApiService by lazy {
+        retrofit.create(IngredientsFilterApiService::class.java)
+    }
+
     override val cocktailsAppRepository: CocktailsAppRepository by lazy {
         NetworkCocktailsAppRepository(
             retrofitAlcoCocktailService,
             retrofitNonAlcoCocktailService,
             retrofitCocktailDetailService,
-            retrofitCocktailSearchService
+            retrofitCocktailSearchService,
+            retrofitIngredientsFilterService
         )
     }
 }

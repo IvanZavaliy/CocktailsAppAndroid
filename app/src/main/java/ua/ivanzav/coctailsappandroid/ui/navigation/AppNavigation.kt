@@ -4,7 +4,6 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -19,11 +18,14 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.FilterAlt
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
@@ -34,10 +36,10 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -45,10 +47,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
+import ua.ivanzav.coctailsappandroid.CocktailsApplication
+import ua.ivanzav.coctailsappandroid.ui.components.drawer.DrawerContent
 import ua.ivanzav.coctailsappandroid.ui.screens.BaseScreen
 import ua.ivanzav.coctailsappandroid.ui.screens.pages.alcohol.AlcoholViewModel
 import ua.ivanzav.coctailsappandroid.ui.screens.pages.nonalcohol.NonAlcoholViewModel
@@ -60,11 +65,17 @@ fun SharedTransitionScope.NavigationBarApp(
     animatedVisibilityScope: AnimatedVisibilityScope,
     onNavigateToDetail: (String, String, String) -> Unit
 ) {
+    val context = LocalContext.current
+    val application = context.applicationContext as CocktailsApplication
+    val repository = application.container.cocktailsAppRepository
+
     val searchViewModel: SearchViewModel = viewModel(factory = SearchViewModel.Factory)
     var isSearchActive by rememberSaveable { mutableStateOf(false) }
 
-    val pagerState = rememberPagerState(pageCount = {BottomNavItems.entries.size})
+    var currentIngredient by rememberSaveable { mutableStateOf<String?>(null) }
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
+    val pagerState = rememberPagerState(pageCount = {BottomNavItems.entries.size})
     val coroutineScope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
@@ -77,58 +88,82 @@ fun SharedTransitionScope.NavigationBarApp(
         closeSearch()
     }
 
-    Scaffold(
-        modifier = modifier
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = {
-            ApplicationTopBar(
-                scrollBehavior = scrollBehavior,
-                isSearchActive = isSearchActive,
-                onSearchActiveChange = { isActive ->
-                    if (!isActive) {
-                        closeSearch()
-                    } else {
-                        isSearchActive = true
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            ModalDrawerSheet {
+                DrawerContent(
+                    repository = repository,
+                    selectedIngredient = currentIngredient,
+                    onIngredientSelected = { ingredient ->
+                        currentIngredient = ingredient
+                        coroutineScope.launch { drawerState.close() }
                     }
-                },
-                searchViewModel = searchViewModel,
-                onFilterClick = {}
-            )
-        },
-        bottomBar = {
-            NavigationBar(windowInsets = NavigationBarDefaults.windowInsets) {
-                BottomNavItems.entries.forEachIndexed { index, destination ->
-                    val isSelected = pagerState.currentPage == index
-                    NavigationBarItem(
-                        selected = isSelected,
-                        onClick = {
-                            coroutineScope.launch {
-                                pagerState.animateScrollToPage(index)
-                            }
-
-                            searchViewModel.updateCategory(destination)
-                        },
-                        icon = {
-                            Icon(
-                                destination.icon,
-                                contentDescription = destination.contentDescription
-                            )
-                        },
-                        label = { Text(destination.label) }
-                    )
-                }
+                )
             }
         }
-    ) { contentPadding ->
+    ) {
+        Scaffold(
+            modifier = modifier
+                .nestedScroll(scrollBehavior.nestedScrollConnection),
+            topBar = {
+                ApplicationTopBar(
+                    scrollBehavior = scrollBehavior,
+                    isSearchActive = isSearchActive,
+                    onSearchActiveChange = { isActive ->
+                        if (!isActive) {
+                            closeSearch()
+                        } else {
+                            isSearchActive = true
+                        }
+                    },
+                    searchViewModel = searchViewModel,
+                    onFilterClick = {
+                        coroutineScope.launch {
+                            drawerState.apply {
+                                if (isClosed) open()
+                                else close()
+                            }
+                        }
+                    }
+                )
+            },
+            bottomBar = {
+                NavigationBar(windowInsets = NavigationBarDefaults.windowInsets) {
+                    BottomNavItems.entries.forEachIndexed { index, destination ->
+                        val isSelected = pagerState.currentPage == index
+                        NavigationBarItem(
+                            selected = isSelected,
+                            onClick = {
+                                coroutineScope.launch {
+                                    pagerState.animateScrollToPage(index)
+                                }
 
-        AppPagerHost(
-            pagerState = pagerState,
-            modifier = Modifier.padding(contentPadding),
-            animatedVisibilityScope = animatedVisibilityScope,
-            onNavigateToDetail = onNavigateToDetail,
-            isSearchActive = isSearchActive,
-            searchViewModel = searchViewModel
-        )
+                                searchViewModel.updateCategory(destination)
+                            },
+                            icon = {
+                                Icon(
+                                    destination.icon,
+                                    contentDescription = destination.contentDescription
+                                )
+                            },
+                            label = { Text(destination.label) }
+                        )
+                    }
+                }
+            }
+        ) { contentPadding ->
+
+            AppPagerHost(
+                pagerState = pagerState,
+                modifier = Modifier.padding(contentPadding),
+                animatedVisibilityScope = animatedVisibilityScope,
+                onNavigateToDetail = onNavigateToDetail,
+                isSearchActive = isSearchActive,
+                searchViewModel = searchViewModel,
+                selectedIngredient = currentIngredient,
+            )
+        }
     }
 }
 
@@ -140,7 +175,8 @@ fun SharedTransitionScope.AppPagerHost(
     animatedVisibilityScope: AnimatedVisibilityScope,
     onNavigateToDetail: (String, String, String) -> Unit,
     isSearchActive: Boolean,
-    searchViewModel: SearchViewModel
+    searchViewModel: SearchViewModel,
+    selectedIngredient: String?
 ) {
     LaunchedEffect(pagerState.currentPage) {
         val currentCategory = BottomNavItems.entries[pagerState.currentPage]
@@ -163,12 +199,16 @@ fun SharedTransitionScope.AppPagerHost(
             )
 
         } else {
-            when (BottomNavItems.entries[pageIndex]) {
+            when (currentTab) {
                 BottomNavItems.ALCOHOL ->
                 {
                     val alcoholViewModel: AlcoholViewModel = viewModel(
                         factory = AlcoholViewModel.Factory
                     )
+
+                    LaunchedEffect(selectedIngredient) {
+                        alcoholViewModel.fetchCocktails(selectedIngredient)
+                    }
 
                     BaseScreen(
                         cocktailsAppUiState = alcoholViewModel.alcoholUiState,
@@ -182,6 +222,10 @@ fun SharedTransitionScope.AppPagerHost(
                     val nonAlcoholViewModel: NonAlcoholViewModel = viewModel(
                         factory = NonAlcoholViewModel.Factory
                     )
+
+                    LaunchedEffect(selectedIngredient) {
+                        nonAlcoholViewModel.fetchCocktails(selectedIngredient)
+                    }
 
                     BaseScreen(
                         cocktailsAppUiState = nonAlcoholViewModel.nonAlcoholUiState,
