@@ -1,4 +1,4 @@
-package ua.ivanzav.coctailsappandroid.ui.screens.pages.alcohol
+package ua.ivanzav.coctailsappandroid.ui.screens.cocktailslist
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -16,17 +16,23 @@ import ua.ivanzav.coctailsappandroid.data.repository.CocktailsAppRepository
 import ua.ivanzav.coctailsappandroid.ui.navigation.CocktailsAppUiState
 import ua.ivanzav.coctailsappandroid.ui.navigation.CocktailsPage
 
-class AlcoholViewModel(private val cocktailsAppRepository: CocktailsAppRepository) : ViewModel() {
-    var alcoholUiState : CocktailsAppUiState by mutableStateOf(CocktailsAppUiState.Loading)
+class CocktailsListViewModel(
+    private val cocktailsAppRepository: CocktailsAppRepository,
+    private var currentPage: CocktailsPage) : ViewModel() {
+    var cocktailsUiState : CocktailsAppUiState by mutableStateOf(CocktailsAppUiState.Loading)
         private set
 
     init {
-        getAlcoholCocktailModels()
+        if (currentPage == CocktailsPage.ALCOHOL) {
+            getAlcoholCocktailModels()
+        } else {
+            getNonAlcoholCocktailModels()
+        }
     }
 
     fun getAlcoholCocktailModels() {
         viewModelScope.launch {
-            alcoholUiState = try {
+            cocktailsUiState = try {
                 val response = cocktailsAppRepository.getAlcoholCocktailModels()
                 val listResult = response.drinks
                 CocktailsAppUiState.Success(listResult, CocktailsPage.ALCOHOL)
@@ -36,40 +42,56 @@ class AlcoholViewModel(private val cocktailsAppRepository: CocktailsAppRepositor
         }
     }
 
+    fun getNonAlcoholCocktailModels() {
+        viewModelScope.launch {
+            cocktailsUiState = try {
+                val response = cocktailsAppRepository.getNonAlcoholCocktailsModels()
+                val listResult = response.drinks
+                CocktailsAppUiState.Success(listResult, CocktailsPage.NONALCOHOL)
+            } catch (e: IOException) {
+                CocktailsAppUiState.Error
+            }
+        }
+    }
+
     fun fetchCocktails(ingredient: String?) {
         viewModelScope.launch {
-            alcoholUiState = CocktailsAppUiState.Loading // Вмикаємо лоадер
+            cocktailsUiState = CocktailsAppUiState.Loading
             try {
                 if (ingredient == null) {
-                    // 1. Якщо фільтру немає - вантажимо стандартний список (Алкогольні)
-                    getAlcoholCocktailModels()
-                    // (для NonAlcoholViewModel тут буде виклик getNonAlcoholicCocktailModels())
+                    if (currentPage == CocktailsPage.ALCOHOL) {
+                        getAlcoholCocktailModels()
+                    } else {
+                        getNonAlcoholCocktailModels()
+                    }
                 } else {
-                    // 2. Якщо є інгредієнт - фільтруємо по ньому
                     val response = cocktailsAppRepository.filterByIngredient(ingredient)
 
-                    // Перетворення спрощеної моделі в CocktailsDataJson (якщо типи відрізняються)
-                    // Якщо filterByIngredient повертає CocktailsDataResponse з CocktailsDataJson, то все ок.
-                    // Якщо повертає деталі, використовуйте мапер.
-                    val drinks = response.drinks ?: emptyList()
+                    val drinks = response.drinks
 
-                    alcoholUiState = CocktailsAppUiState.Success(
+                    cocktailsUiState = CocktailsAppUiState.Success(
                         cocktailModels = drinks,
                         page = CocktailsPage.ALCOHOL
                     )
                 }
             } catch (e: Exception) {
-                alcoholUiState = CocktailsAppUiState.Error
+                cocktailsUiState = CocktailsAppUiState.Error
             }
         }
     }
 
     companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
+        fun provideFactory(
+            page: CocktailsPage
+        ): ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application = (this[APPLICATION_KEY] as CocktailsApplication)
-                val cocktailsAppRepository = application.container.cocktailsAppRepository
-                AlcoholViewModel(cocktailsAppRepository = cocktailsAppRepository)
+                val repository = application.container.cocktailsAppRepository
+
+                CocktailsListViewModel(
+                    cocktailsAppRepository = repository,
+                    currentPage = page
+                )
             }
         }
     }

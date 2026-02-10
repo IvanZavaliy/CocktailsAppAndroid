@@ -55,8 +55,7 @@ import kotlinx.coroutines.launch
 import ua.ivanzav.coctailsappandroid.CocktailsApplication
 import ua.ivanzav.coctailsappandroid.ui.components.drawer.DrawerContent
 import ua.ivanzav.coctailsappandroid.ui.screens.BaseScreen
-import ua.ivanzav.coctailsappandroid.ui.screens.pages.alcohol.AlcoholViewModel
-import ua.ivanzav.coctailsappandroid.ui.screens.pages.nonalcohol.NonAlcoholViewModel
+import ua.ivanzav.coctailsappandroid.ui.screens.cocktailslist.CocktailsListViewModel
 
 @OptIn(ExperimentalSharedTransitionApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -202,34 +201,36 @@ fun SharedTransitionScope.AppPagerHost(
             when (currentTab) {
                 BottomNavItems.ALCOHOL ->
                 {
-                    val alcoholViewModel: AlcoholViewModel = viewModel(
-                        factory = AlcoholViewModel.Factory
+                    val alcoViewModel: CocktailsListViewModel = viewModel(
+                        key = "AlcoholViewModel",
+                        factory = CocktailsListViewModel.provideFactory(CocktailsPage.ALCOHOL)
                     )
 
                     LaunchedEffect(selectedIngredient) {
-                        alcoholViewModel.fetchCocktails(selectedIngredient)
+                        alcoViewModel.fetchCocktails(selectedIngredient)
                     }
 
                     BaseScreen(
-                        cocktailsAppUiState = alcoholViewModel.alcoholUiState,
-                        retryAction = alcoholViewModel::getAlcoholCocktailModels,
+                        cocktailsAppUiState = alcoViewModel.cocktailsUiState,
+                        retryAction = alcoViewModel::getAlcoholCocktailModels,
                         animatedVisibilityScope = animatedVisibilityScope,
                         onItemClick = onNavigateToDetail
                     )
                 }
                 BottomNavItems.NONALCOHOL ->
                 {
-                    val nonAlcoholViewModel: NonAlcoholViewModel = viewModel(
-                        factory = NonAlcoholViewModel.Factory
+                    val nonAlcoViewModel: CocktailsListViewModel = viewModel(
+                        key = "NonAlcoholViewModel",
+                        factory = CocktailsListViewModel.provideFactory(CocktailsPage.NONALCOHOL)
                     )
 
                     LaunchedEffect(selectedIngredient) {
-                        nonAlcoholViewModel.fetchCocktails(selectedIngredient)
+                        nonAlcoViewModel.fetchCocktails(selectedIngredient)
                     }
 
                     BaseScreen(
-                        cocktailsAppUiState = nonAlcoholViewModel.nonAlcoholUiState,
-                        retryAction = nonAlcoholViewModel::getNonAlcoholicCocktailModels,
+                        cocktailsAppUiState = nonAlcoViewModel.cocktailsUiState,
+                        retryAction = nonAlcoViewModel::getNonAlcoholCocktailModels,
                         animatedVisibilityScope = animatedVisibilityScope,
                         onItemClick = onNavigateToDetail
                     )

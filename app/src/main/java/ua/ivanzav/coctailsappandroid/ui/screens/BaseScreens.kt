@@ -18,17 +18,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ua.ivanzav.coctailsappandroid.R
 import ua.ivanzav.coctailsappandroid.ui.navigation.CocktailsAppUiState
 import ua.ivanzav.coctailsappandroid.ui.navigation.CocktailsPage
-import ua.ivanzav.coctailsappandroid.ui.screens.pages.alcohol.AlcoholCocktailsScreen
-import ua.ivanzav.coctailsappandroid.ui.screens.pages.nonalcohol.NonAlcoholCocktailsScreen
+import ua.ivanzav.coctailsappandroid.ui.screens.cocktailslist.CocktailsListScreen
 import androidx.compose.material3.LoadingIndicator
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -43,22 +38,12 @@ fun SharedTransitionScope.BaseScreen (
     when (cocktailsAppUiState) {
         is CocktailsAppUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
         is CocktailsAppUiState.Success ->
-            when {
-                cocktailsAppUiState.page == CocktailsPage.ALCOHOL ->
-                    AlcoholCocktailsScreen(
-                        cocktailModels = cocktailsAppUiState.cocktailModels,
-                        animatedVisibilityScope = animatedVisibilityScope,
-                        onItemClick = onItemClick,
-                        modifier = modifier.fillMaxWidth()
-                    )
-                cocktailsAppUiState.page == CocktailsPage.NONALCOHOL ->
-                    NonAlcoholCocktailsScreen(
-                        cocktailModels = cocktailsAppUiState.cocktailModels,
-                        animatedVisibilityScope = animatedVisibilityScope,
-                        onItemClick = onItemClick,
-                        modifier = modifier.fillMaxWidth()
-                    )
-            }
+            CocktailsListScreen(
+                cocktailModels = cocktailsAppUiState.cocktailModels,
+                animatedVisibilityScope = animatedVisibilityScope,
+                onItemClick = onItemClick,
+                modifier = modifier.fillMaxWidth()
+            )
         is CocktailsAppUiState.Error -> ErrorScreen(retryAction ,modifier = modifier.fillMaxSize())
     }
 }

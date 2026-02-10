@@ -1,4 +1,4 @@
-package ua.ivanzav.coctailsappandroid.ui.screens.pages.alcohol
+package ua.ivanzav.coctailsappandroid.ui.screens.cocktailslist
 
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -20,7 +20,7 @@ import ua.ivanzav.coctailsappandroid.ui.components.CocktailCard
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun SharedTransitionScope.AlcoholCocktailsScreen(
+fun SharedTransitionScope.CocktailsListScreen(
     cocktailModels: List<CocktailsDataJson>,
     animatedVisibilityScope: AnimatedVisibilityScope,
     onItemClick: (String, String, String) -> Unit,
@@ -34,7 +34,8 @@ fun SharedTransitionScope.AlcoholCocktailsScreen(
     ) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize(),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
@@ -43,9 +44,7 @@ fun SharedTransitionScope.AlcoholCocktailsScreen(
                     model,
                     animatedVisibilityScope = animatedVisibilityScope,
                     modifier = Modifier
-                        .clickable {
-                            onItemClick(model.image, model.name, model.id)
-                        }
+                        .clickable { onItemClick(model.image, model.name, model.id) }
                 )
             }
         }
