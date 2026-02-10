@@ -21,7 +21,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import ua.ivanzav.coctailsappandroid.R
 import ua.ivanzav.coctailsappandroid.ui.navigation.CocktailsAppUiState
-import ua.ivanzav.coctailsappandroid.ui.navigation.CocktailsPage
 import ua.ivanzav.coctailsappandroid.ui.screens.cocktailslist.CocktailsListScreen
 import androidx.compose.material3.LoadingIndicator
 
@@ -41,7 +40,7 @@ fun SharedTransitionScope.BaseScreen (
             CocktailsListScreen(
                 cocktailModels = cocktailsAppUiState.cocktailModels,
                 animatedVisibilityScope = animatedVisibilityScope,
-                onItemClick = onItemClick,
+                onCocktailClick = onItemClick,
                 modifier = modifier.fillMaxWidth()
             )
         is CocktailsAppUiState.Error -> ErrorScreen(retryAction ,modifier = modifier.fillMaxSize())
@@ -76,4 +75,19 @@ fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
             Text("Retry")
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+fun ContentLoading(modifier: Modifier = Modifier) {
+    LoadingIndicator(
+        modifier = Modifier
+            .padding(top = 25.dp)
+            .fillMaxWidth()
+    )
+}
+
+@Composable
+fun ContentError(modifier: Modifier = Modifier) {
+
 }

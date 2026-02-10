@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,7 +22,6 @@ import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -41,6 +41,10 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import ua.ivanzav.coctailsappandroid.data.model.CocktailDetailDataJson
+import ua.ivanzav.coctailsappandroid.ui.screens.ContentError
+import ua.ivanzav.coctailsappandroid.ui.screens.ContentLoading
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @OptIn(ExperimentalGlideComposeApi::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -50,6 +54,7 @@ fun SharedTransitionScope.CocktailDetailScreen(
     drinkId: String,
     animatedVisibilityScope: AnimatedVisibilityScope,
     onBackClick: () -> Unit,
+    onIngredientClick: (String, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val cocktailDetailViewModel: CocktailDetailViewModel = viewModel(
@@ -63,9 +68,9 @@ fun SharedTransitionScope.CocktailDetailScreen(
 
     Box(
         modifier = Modifier
-        .fillMaxSize()
-        .background(MaterialTheme.colorScheme.surface)
-        .navigationBarsPadding()
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surface)
+            .navigationBarsPadding()
     ) {
         Box(
             modifier = Modifier
@@ -102,38 +107,41 @@ fun SharedTransitionScope.CocktailDetailScreen(
                         )
                     }
                 }
+                Column(
+                    modifier = modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = labelText,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontSize = 28.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        modifier = modifier
+                            .padding(top = 16.dp)
+                            .sharedElement(
+                                sharedContentState = rememberSharedContentState(key = "text/$labelText"),
+                                animatedVisibilityScope = animatedVisibilityScope,
+                                boundsTransform = { _, _ ->
+                                    tween(durationMillis = 300)
+                                }
+                            )
+                    )
 
-                Column {
-                    Column(
-                        modifier = modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = labelText,
-                            style = MaterialTheme.typography.titleLarge,
-                            fontSize = 28.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onBackground,
-                            modifier = modifier
-                                .padding(top = 16.dp)
-                                .sharedElement(
-                                    sharedContentState = rememberSharedContentState(key = "text/$labelText"),
-                                    animatedVisibilityScope = animatedVisibilityScope,
-                                    boundsTransform = { _, _ ->
-                                        tween(durationMillis = 300)
-                                    }
-                                )
+                    when (cocktailDetailUiState) {
+                        is CocktailDetailUiState.Loading -> ContentLoading()
+                        is CocktailDetailUiState.Success -> CocktailDetailContent(
+                            cocktailDetailUiState.cocktailModelJson.first(),
+                            animatedVisibilityScope = animatedVisibilityScope,
+                            onItemClick = onIngredientClick
                         )
 
-                        when(cocktailDetailUiState){
-                            is CocktailDetailUiState.Loading -> ContentLoading()
-                            is CocktailDetailUiState.Success -> MainDetailContent(cocktailDetailUiState.cocktailModelJson.first())
-                            is CocktailDetailUiState.Error -> ContentError()
-                        }
+                        is CocktailDetailUiState.Error -> ContentError()
                     }
                 }
             }
         }
+
         FloatingActionButton(
             onClick = onBackClick,
             modifier = Modifier
@@ -151,7 +159,12 @@ fun SharedTransitionScope.CocktailDetailScreen(
 
 @OptIn(ExperimentalGlideComposeApi::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun MainDetailContent(drink: CocktailDetailDataJson, modifier: Modifier = Modifier) {
+fun SharedTransitionScope.CocktailDetailContent(
+    drink: CocktailDetailDataJson,
+    animatedVisibilityScope: AnimatedVisibilityScope,
+    onItemClick: (String, String) -> Unit,
+    modifier: Modifier = Modifier
+) {
     val ingredientsList = drink.getListOfIngredientsAndMeasures()
 
     Column(
@@ -176,15 +189,22 @@ fun MainDetailContent(drink: CocktailDetailDataJson, modifier: Modifier = Modifi
                 .fillMaxWidth()
         )
         ingredientsList.forEach { (ingredient, nullableMeasure) ->
-            val measure: String = if (nullableMeasure == null) ""
-            else "$nullableMeasure "
+            val measure: String = if (nullableMeasure == null) "" else "$nullableMeasure "
+            val largeImageUrl = "https://www.thecocktaildb.com/images/ingredients/${ingredient.replace(" ", "%20")}.png"
+            val smallImageUrl = "https://www.thecocktaildb.com/images/ingredients/${ingredient.replace(" ", "%20")}-small.png"
 
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .clickable {
+                        onItemClick(
+                            ingredient,
+                            largeImageUrl
+                        )
+                    }
             ) {
                 GlideImage(
-                    model = "https://www.thecocktaildb.com/images/ingredients/$ingredient-small.png",
+                    model = smallImageUrl,
                     contentDescription = ingredient,
                     loading = placeholder {
                         LoadingIndicator(
@@ -194,10 +214,28 @@ fun MainDetailContent(drink: CocktailDetailDataJson, modifier: Modifier = Modifi
                     modifier = modifier
                         .padding(4.dp)
                         .size(100.dp)
-                        .clip(RoundedCornerShape(8.dp)),
+                        .clip(RoundedCornerShape(8.dp))
+                        .sharedElement(
+                            sharedContentState = rememberSharedContentState(key = "image/$largeImageUrl"),
+                            animatedVisibilityScope = animatedVisibilityScope,
+                            boundsTransform = { _, _ ->
+                                tween(durationMillis = 300)
+                            }
+                        ),
                     contentScale = ContentScale.Fit,
                 )
-                Text(text = "$measure$ingredient")
+                Text(text = measure)
+                Text(
+                    text = ingredient,
+                    modifier = modifier
+                        .sharedElement(
+                        sharedContentState = rememberSharedContentState(key = "text/$ingredient"),
+                        animatedVisibilityScope = animatedVisibilityScope,
+                        boundsTransform = { _, _ ->
+                            tween(durationMillis = 300)
+                        }
+                    )
+                )
             }
         }
 
@@ -217,19 +255,4 @@ fun MainDetailContent(drink: CocktailDetailDataJson, modifier: Modifier = Modifi
                 .fillMaxWidth()
         )
     }
-}
-
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
-@Composable
-fun ContentLoading(modifier: Modifier = Modifier) {
-    LoadingIndicator(
-        modifier = Modifier
-            .padding(top = 25.dp)
-            .fillMaxWidth()
-    )
-}
-
-@Composable
-fun ContentError(modifier: Modifier = Modifier) {
-
 }

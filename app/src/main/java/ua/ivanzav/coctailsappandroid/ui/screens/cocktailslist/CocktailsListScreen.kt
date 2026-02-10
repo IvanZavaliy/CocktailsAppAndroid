@@ -23,7 +23,7 @@ import ua.ivanzav.coctailsappandroid.ui.components.CocktailCard
 fun SharedTransitionScope.CocktailsListScreen(
     cocktailModels: List<CocktailsDataJson>,
     animatedVisibilityScope: AnimatedVisibilityScope,
-    onItemClick: (String, String, String) -> Unit,
+    onCocktailClick: (String, String, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -44,7 +44,7 @@ fun SharedTransitionScope.CocktailsListScreen(
                     model,
                     animatedVisibilityScope = animatedVisibilityScope,
                     modifier = Modifier
-                        .clickable { onItemClick(model.image, model.name, model.id) }
+                        .clickable { onCocktailClick(model.image, model.name, model.id) }
                 )
             }
         }
