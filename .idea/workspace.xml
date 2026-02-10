@@ -22,10 +22,8 @@
       <change beforePath="$PROJECT_DIR$/.gradle/9.1.0/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.1.0/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/RootApplication.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/RootApplication.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/BaseScreens.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/BaseScreens.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/cocktail/CocktailDetailScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/cocktail/CocktailDetailScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/cocktailslist/CocktailsListScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/cocktailslist/CocktailsListScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/navigation/ScreenPageNav.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/navigation/ScreenPageNav.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/ingredient/IngredientDetailScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ua/ivanzav/coctailsappandroid/ui/screens/ingredient/IngredientDetailScreen.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,10 +60,10 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Kotlin Enum" />
-        <option value="Kotlin Class" />
         <option value="Kotlin Data Class" />
-        <option value="Kotlin Interface" />
         <option value="Kotlin File" />
+        <option value="Kotlin Interface" />
+        <option value="Kotlin Class" />
       </list>
     </option>
   </component>
