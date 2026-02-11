@@ -54,7 +54,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 import ua.ivanzav.coctailsappandroid.CocktailsApplication
 import ua.ivanzav.coctailsappandroid.ui.components.drawer.DrawerContent
-import ua.ivanzav.coctailsappandroid.ui.screens.BaseScreen
+import ua.ivanzav.coctailsappandroid.ui.screens.BaseCocktailScreen
+import ua.ivanzav.coctailsappandroid.ui.screens.account.AccountScreen
 import ua.ivanzav.coctailsappandroid.ui.screens.cocktailslist.CocktailsListViewModel
 
 @OptIn(ExperimentalSharedTransitionApi::class, ExperimentalMaterial3Api::class)
@@ -106,6 +107,8 @@ fun SharedTransitionScope.NavigationBarApp(
             modifier = modifier
                 .nestedScroll(scrollBehavior.nestedScrollConnection),
             topBar = {
+                val currentTab = BottomNavItems.entries[pagerState.currentPage]
+
                 ApplicationTopBar(
                     scrollBehavior = scrollBehavior,
                     isSearchActive = isSearchActive,
@@ -124,7 +127,8 @@ fun SharedTransitionScope.NavigationBarApp(
                                 else close()
                             }
                         }
-                    }
+                    },
+                    isTopBarButtonsEnabled = (currentTab != BottomNavItems.ACCOUNT)
                 )
             },
             bottomBar = {
@@ -139,6 +143,10 @@ fun SharedTransitionScope.NavigationBarApp(
                                 }
 
                                 searchViewModel.updateCategory(destination)
+
+                                if (destination == BottomNavItems.ACCOUNT) {
+                                    isSearchActive = false
+                                }
                             },
                             icon = {
                                 Icon(
@@ -189,7 +197,7 @@ fun SharedTransitionScope.AppPagerHost(
         val currentTab = BottomNavItems.entries[pageIndex]
 
         if (isSearchActive && searchViewModel.isSearchExecuted) {
-            BaseScreen(
+            BaseCocktailScreen(
                 cocktailsAppUiState = searchViewModel.searchUiState,
                 retryAction = searchViewModel::performSearch,
                 animatedVisibilityScope = animatedVisibilityScope,
@@ -210,7 +218,7 @@ fun SharedTransitionScope.AppPagerHost(
                         alcoViewModel.fetchCocktails(selectedIngredient)
                     }
 
-                    BaseScreen(
+                    BaseCocktailScreen(
                         cocktailsAppUiState = alcoViewModel.cocktailsUiState,
                         retryAction = alcoViewModel::getAlcoholCocktailModels,
                         animatedVisibilityScope = animatedVisibilityScope,
@@ -228,12 +236,16 @@ fun SharedTransitionScope.AppPagerHost(
                         nonAlcoViewModel.fetchCocktails(selectedIngredient)
                     }
 
-                    BaseScreen(
+                    BaseCocktailScreen(
                         cocktailsAppUiState = nonAlcoViewModel.cocktailsUiState,
                         retryAction = nonAlcoViewModel::getNonAlcoholCocktailModels,
                         animatedVisibilityScope = animatedVisibilityScope,
                         onItemClick = onNavigateToDetail
                     )
+                }
+                BottomNavItems.ACCOUNT ->
+                {
+                    AccountScreen()
                 }
             }
         }
@@ -247,7 +259,8 @@ fun ApplicationTopBar(
     isSearchActive: Boolean,
     onSearchActiveChange: (Boolean) -> Unit,
     searchViewModel: SearchViewModel,
-    onFilterClick: () -> Unit
+    onFilterClick: () -> Unit,
+    isTopBarButtonsEnabled: Boolean
 ) {
     val query = searchViewModel.searchQuery
 
@@ -281,22 +294,26 @@ fun ApplicationTopBar(
                 )
             },
             navigationIcon = {
-                IconButton(onClick = onFilterClick) {
-                    Icon(
-                        imageVector = Icons.Default.FilterAlt,
-                        contentDescription = "Filter Ingredients"
-                    )
+                if (isTopBarButtonsEnabled) {
+                    IconButton(onClick = onFilterClick) {
+                        Icon(
+                            imageVector = Icons.Default.FilterAlt,
+                            contentDescription = "Filter Ingredients"
+                        )
+                    }
                 }
             },
 
             actions = {
-                IconButton(onClick = {
-                    onSearchActiveChange(true)
-                }) {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = "Search Button"
-                    )
+                if (isTopBarButtonsEnabled) {
+                    IconButton(onClick = {
+                        onSearchActiveChange(true)
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "Search Button"
+                        )
+                    }
                 }
             }
         )

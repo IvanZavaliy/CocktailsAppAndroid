@@ -26,7 +26,7 @@ import androidx.compose.material3.LoadingIndicator
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun SharedTransitionScope.BaseScreen (
+fun SharedTransitionScope.BaseCocktailScreen (
     cocktailsAppUiState: CocktailsAppUiState,
     retryAction: () -> Unit,
     animatedVisibilityScope: AnimatedVisibilityScope,

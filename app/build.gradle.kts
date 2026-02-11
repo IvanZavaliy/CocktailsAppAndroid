@@ -65,4 +65,7 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.5.0-alpha12")
     implementation("androidx.compose.material:material-icons-extended:1.7.6")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+    implementation("com.google.firebase:firebase-auth-ktx:23.2.1")
+    implementation("com.google.android.gms:play-services-auth:21.5.0")
+    implementation("io.coil-kt:coil-compose:2.2.2")
 }

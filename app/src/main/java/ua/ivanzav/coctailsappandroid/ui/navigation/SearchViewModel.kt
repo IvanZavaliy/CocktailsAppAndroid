@@ -84,11 +84,15 @@ class SearchViewModel(private val cocktailsAppRepository: CocktailsAppRepository
             searchUiState = CocktailsAppUiState.Error
             return
         }
+        if (currentTab == BottomNavItems.ACCOUNT) {
+            return
+        }
 
         val filteredDetails = rawSearchResults.filter { drink ->
             when (currentTab) {
                 BottomNavItems.ALCOHOL -> drink.strAlcoholic == "Alcoholic"
                 BottomNavItems.NONALCOHOL -> drink.strAlcoholic != "Alcoholic"
+                BottomNavItems.ACCOUNT -> false
             }
         }
 
