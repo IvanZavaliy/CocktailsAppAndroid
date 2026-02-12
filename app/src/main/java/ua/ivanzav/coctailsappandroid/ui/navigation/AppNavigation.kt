@@ -51,10 +51,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import ua.ivanzav.coctailsappandroid.CocktailsApplication
+import ua.ivanzav.coctailsappandroid.presentation.sign_in.GoogleAuthUiClient
 import ua.ivanzav.coctailsappandroid.ui.components.drawer.DrawerContent
 import ua.ivanzav.coctailsappandroid.ui.screens.BaseCocktailScreen
+import ua.ivanzav.coctailsappandroid.ui.screens.account.AccountPageNavController
 import ua.ivanzav.coctailsappandroid.ui.screens.account.AccountScreen
 import ua.ivanzav.coctailsappandroid.ui.screens.cocktailslist.CocktailsListViewModel
 
@@ -183,7 +186,7 @@ fun SharedTransitionScope.AppPagerHost(
     onNavigateToDetail: (String, String, String) -> Unit,
     isSearchActive: Boolean,
     searchViewModel: SearchViewModel,
-    selectedIngredient: String?
+    selectedIngredient: String?,
 ) {
     LaunchedEffect(pagerState.currentPage) {
         val currentCategory = BottomNavItems.entries[pagerState.currentPage]
@@ -245,7 +248,7 @@ fun SharedTransitionScope.AppPagerHost(
                 }
                 BottomNavItems.ACCOUNT ->
                 {
-                    AccountScreen()
+                    AccountPageNavController()
                 }
             }
         }

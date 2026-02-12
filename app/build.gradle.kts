@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     id("org.jetbrains.kotlin.plugin.serialization") version "2.0.21"
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -67,5 +68,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     implementation("com.google.firebase:firebase-auth-ktx:23.2.1")
     implementation("com.google.android.gms:play-services-auth:21.5.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.10.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.10.0")
+    implementation("androidx.navigation:navigation-compose:2.9.7")
     implementation("io.coil-kt:coil-compose:2.2.2")
 }
