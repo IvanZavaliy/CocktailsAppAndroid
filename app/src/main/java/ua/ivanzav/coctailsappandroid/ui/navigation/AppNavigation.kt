@@ -51,14 +51,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import ua.ivanzav.coctailsappandroid.CocktailsApplication
-import ua.ivanzav.coctailsappandroid.presentation.sign_in.GoogleAuthUiClient
+import ua.ivanzav.coctailsappandroid.presentation.sign_in.UserData
 import ua.ivanzav.coctailsappandroid.ui.components.drawer.DrawerContent
 import ua.ivanzav.coctailsappandroid.ui.screens.BaseCocktailScreen
-import ua.ivanzav.coctailsappandroid.ui.screens.account.AccountPageNavController
-import ua.ivanzav.coctailsappandroid.ui.screens.account.AccountScreen
+import ua.ivanzav.coctailsappandroid.ui.screens.account.AccountPage
 import ua.ivanzav.coctailsappandroid.ui.screens.cocktailslist.CocktailsListViewModel
 
 @OptIn(ExperimentalSharedTransitionApi::class, ExperimentalMaterial3Api::class)
@@ -66,7 +64,9 @@ import ua.ivanzav.coctailsappandroid.ui.screens.cocktailslist.CocktailsListViewM
 fun SharedTransitionScope.NavigationBarApp(
     modifier: Modifier = Modifier,
     animatedVisibilityScope: AnimatedVisibilityScope,
-    onNavigateToDetail: (String, String, String) -> Unit
+    onNavigateToDetail: (String, String, String) -> Unit,
+    userData: UserData?,
+    onSignOut: () -> Unit
 ) {
     val context = LocalContext.current
     val application = context.applicationContext as CocktailsApplication
@@ -172,6 +172,8 @@ fun SharedTransitionScope.NavigationBarApp(
                 isSearchActive = isSearchActive,
                 searchViewModel = searchViewModel,
                 selectedIngredient = currentIngredient,
+                userData = userData,
+                onSignOut = onSignOut,
             )
         }
     }
@@ -187,6 +189,9 @@ fun SharedTransitionScope.AppPagerHost(
     isSearchActive: Boolean,
     searchViewModel: SearchViewModel,
     selectedIngredient: String?,
+    userData: UserData?,
+    onSignOut: () -> Unit
+
 ) {
     LaunchedEffect(pagerState.currentPage) {
         val currentCategory = BottomNavItems.entries[pagerState.currentPage]
@@ -248,7 +253,10 @@ fun SharedTransitionScope.AppPagerHost(
                 }
                 BottomNavItems.ACCOUNT ->
                 {
-                    AccountPageNavController()
+                    AccountPage(
+                        userData = userData,
+                        onSignOut = onSignOut
+                    )
                 }
             }
         }
