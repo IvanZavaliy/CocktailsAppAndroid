@@ -13,13 +13,18 @@ import kotlinx.coroutines.launch
 import okio.IOException
 import ua.ivanzav.coctailsappandroid.CocktailsApplication
 import ua.ivanzav.coctailsappandroid.data.repository.CocktailsAppRepository
+import ua.ivanzav.coctailsappandroid.data.repository.FavoriteRepository
 import ua.ivanzav.coctailsappandroid.ui.navigation.CocktailsAppUiState
 import ua.ivanzav.coctailsappandroid.ui.navigation.CocktailsPage
 
 class CocktailsListViewModel(
     private val cocktailsAppRepository: CocktailsAppRepository,
+    private val favoriteRepository: FavoriteRepository,
     private var currentPage: CocktailsPage) : ViewModel() {
     var cocktailsUiState : CocktailsAppUiState by mutableStateOf(CocktailsAppUiState.Loading)
+        private set
+
+    var favoriteIds by mutableStateOf(setOf<String>())
         private set
 
     init {
@@ -27,6 +32,14 @@ class CocktailsListViewModel(
             getAlcoholCocktailModels()
         } else {
             getNonAlcoholCocktailModels()
+        }
+    }
+
+    fun fetchFavorites(userId: String?) {
+        if (userId == null) return
+        viewModelScope.launch {
+            val favorites = favoriteRepository.getFavorites(userId)
+            favoriteIds = favorites.map { it.id }.toSet()
         }
     }
 
@@ -87,9 +100,11 @@ class CocktailsListViewModel(
             initializer {
                 val application = (this[APPLICATION_KEY] as CocktailsApplication)
                 val repository = application.container.cocktailsAppRepository
+                val favoriteRepository = application.container.favoriteRepository
 
                 CocktailsListViewModel(
                     cocktailsAppRepository = repository,
+                    favoriteRepository = favoriteRepository,
                     currentPage = page
                 )
             }

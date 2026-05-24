@@ -205,8 +205,13 @@ fun SharedTransitionScope.AppPagerHost(
         val currentTab = BottomNavItems.entries[pageIndex]
 
         if (isSearchActive && searchViewModel.isSearchExecuted) {
+            LaunchedEffect(userData) {
+                searchViewModel.fetchFavorites(userData?.userId)
+            }
+
             BaseCocktailScreen(
                 cocktailsAppUiState = searchViewModel.searchUiState,
+                favoriteIds = searchViewModel.favoriteIds,
                 retryAction = searchViewModel::performSearch,
                 animatedVisibilityScope = animatedVisibilityScope,
                 onItemClick = onNavigateToDetail,
@@ -226,8 +231,13 @@ fun SharedTransitionScope.AppPagerHost(
                         alcoViewModel.fetchCocktails(selectedIngredient)
                     }
 
+                    LaunchedEffect(userData) {
+                        alcoViewModel.fetchFavorites(userData?.userId)
+                    }
+
                     BaseCocktailScreen(
                         cocktailsAppUiState = alcoViewModel.cocktailsUiState,
+                        favoriteIds = alcoViewModel.favoriteIds,
                         retryAction = alcoViewModel::getAlcoholCocktailModels,
                         animatedVisibilityScope = animatedVisibilityScope,
                         onItemClick = onNavigateToDetail
@@ -244,8 +254,13 @@ fun SharedTransitionScope.AppPagerHost(
                         nonAlcoViewModel.fetchCocktails(selectedIngredient)
                     }
 
+                    LaunchedEffect(userData) {
+                        nonAlcoViewModel.fetchFavorites(userData?.userId)
+                    }
+
                     BaseCocktailScreen(
                         cocktailsAppUiState = nonAlcoViewModel.cocktailsUiState,
+                        favoriteIds = nonAlcoViewModel.favoriteIds,
                         retryAction = nonAlcoViewModel::getNonAlcoholCocktailModels,
                         animatedVisibilityScope = animatedVisibilityScope,
                         onItemClick = onNavigateToDetail
@@ -255,6 +270,8 @@ fun SharedTransitionScope.AppPagerHost(
                 {
                     AccountPage(
                         userData = userData,
+                        animatedVisibilityScope = animatedVisibilityScope,
+                        onCocktailClick = onNavigateToDetail,
                         onSignOut = onSignOut
                     )
                 }

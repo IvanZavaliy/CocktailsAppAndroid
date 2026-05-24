@@ -12,13 +12,21 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.launch
 import okio.IOException
 import ua.ivanzav.coctailsappandroid.CocktailsApplication
+import ua.ivanzav.coctailsappandroid.data.model.CocktailsDataJson
 import ua.ivanzav.coctailsappandroid.data.repository.CocktailsAppRepository
+import ua.ivanzav.coctailsappandroid.data.repository.FavoriteRepository
 
-class CocktailDetailViewModel(private val cocktailsAppRepository: CocktailsAppRepository) : ViewModel() {
+class CocktailDetailViewModel(
+    private val cocktailsAppRepository: CocktailsAppRepository,
+    private val favoriteRepository: FavoriteRepository
+) : ViewModel() {
     var cocktailDetailUiState: CocktailDetailUiState by mutableStateOf(CocktailDetailUiState.Loading)
         private set
 
-    fun getCocktailDetailModel(cocktailId: String) {
+    var isFavorite by mutableStateOf(false)
+        private set
+
+    fun getCocktailDetailModel(cocktailId: String, userId: String?) {
         viewModelScope.launch {
             cocktailDetailUiState = try {
                 val response = cocktailsAppRepository.getCocktailDetailModel(cocktailId)
@@ -26,6 +34,22 @@ class CocktailDetailViewModel(private val cocktailsAppRepository: CocktailsAppRe
                 CocktailDetailUiState.Success(listResult)
             } catch (e: IOException) {
                 CocktailDetailUiState.Error
+            }
+            
+            if (userId != null) {
+                isFavorite = favoriteRepository.isFavorite(userId, cocktailId)
+            }
+        }
+    }
+
+    fun toggleFavorite(userId: String, cocktail: CocktailsDataJson) {
+        viewModelScope.launch {
+            if (isFavorite) {
+                favoriteRepository.removeFavorite(userId, cocktail.id)
+                isFavorite = false
+            } else {
+                favoriteRepository.addFavorite(userId, cocktail)
+                isFavorite = true
             }
         }
     }
@@ -35,7 +59,11 @@ class CocktailDetailViewModel(private val cocktailsAppRepository: CocktailsAppRe
             initializer {
                 val application = (this[APPLICATION_KEY] as CocktailsApplication)
                 val cocktailsAppRepository = application.container.cocktailsAppRepository
-                CocktailDetailViewModel(cocktailsAppRepository = cocktailsAppRepository)
+                val favoriteRepository = application.container.favoriteRepository
+                CocktailDetailViewModel(
+                    cocktailsAppRepository = cocktailsAppRepository,
+                    favoriteRepository = favoriteRepository
+                )
             }
         }
     }

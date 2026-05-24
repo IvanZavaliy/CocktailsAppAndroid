@@ -1,5 +1,6 @@
 package ua.ivanzav.coctailsappandroid.ui.screens.cocktail
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.tween
@@ -19,6 +20,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronLeft
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -28,10 +31,16 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -41,6 +50,7 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import ua.ivanzav.coctailsappandroid.data.model.CocktailDetailDataJson
+import ua.ivanzav.coctailsappandroid.data.model.CocktailsDataJson
 import ua.ivanzav.coctailsappandroid.ui.screens.ContentError
 import ua.ivanzav.coctailsappandroid.ui.screens.ContentLoading
 import java.net.URLEncoder
@@ -52,19 +62,22 @@ fun SharedTransitionScope.CocktailDetailScreen(
     imageUrl: String,
     labelText: String,
     drinkId: String,
+    userId: String?,
     animatedVisibilityScope: AnimatedVisibilityScope,
     onBackClick: () -> Unit,
     onIngredientClick: (String, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
     val cocktailDetailViewModel: CocktailDetailViewModel = viewModel(
         factory = CocktailDetailViewModel.Factory
     )
     LaunchedEffect(drinkId) {
-        cocktailDetailViewModel.getCocktailDetailModel(drinkId)
+        cocktailDetailViewModel.getCocktailDetailModel(drinkId, userId)
     }
 
     val cocktailDetailUiState = cocktailDetailViewModel.cocktailDetailUiState
+    val isFavorite = cocktailDetailViewModel.isFavorite
 
     Box(
         modifier = Modifier
@@ -152,6 +165,30 @@ fun SharedTransitionScope.CocktailDetailScreen(
             Icon(
                 imageVector = Icons.Default.ChevronLeft,
                 contentDescription = "Go Back"
+            )
+        }
+        FloatingActionButton(
+            onClick = {
+                if (userId != null) {
+                    val cocktail = CocktailsDataJson(
+                        name = labelText,
+                        image = imageUrl,
+                        id = drinkId
+                    )
+                    cocktailDetailViewModel.toggleFavorite(userId, cocktail)
+                    val message = if (!isFavorite) "Added to favorites" else "Removed from favorites"
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(context, "Please sign in to add favorites", Toast.LENGTH_SHORT).show()
+                }
+            },
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(end = 80.dp)
+        ) {
+            Icon(
+                imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                contentDescription = "Favorite Indicator"
             )
         }
     }
@@ -251,7 +288,7 @@ fun SharedTransitionScope.CocktailDetailContent(
         Text(
             text = drink.strInstructions ?: "",
             modifier = Modifier
-                .padding(start = 16.dp, end = 16.dp, bottom = 40.dp)
+                .padding(start = 16.dp, end = 16.dp, bottom = 56.dp)
                 .fillMaxWidth()
         )
     }

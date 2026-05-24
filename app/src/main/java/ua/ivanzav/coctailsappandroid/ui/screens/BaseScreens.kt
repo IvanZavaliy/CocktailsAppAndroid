@@ -28,6 +28,7 @@ import androidx.compose.material3.LoadingIndicator
 @Composable
 fun SharedTransitionScope.BaseCocktailScreen (
     cocktailsAppUiState: CocktailsAppUiState,
+    favoriteIds: Set<String>,
     retryAction: () -> Unit,
     animatedVisibilityScope: AnimatedVisibilityScope,
     onItemClick: (String, String, String) -> Unit,
@@ -39,6 +40,7 @@ fun SharedTransitionScope.BaseCocktailScreen (
         is CocktailsAppUiState.Success ->
             CocktailsListScreen(
                 cocktailModels = cocktailsAppUiState.cocktailModels,
+                favoriteIds = favoriteIds,
                 animatedVisibilityScope = animatedVisibilityScope,
                 onCocktailClick = onItemClick,
                 modifier = modifier.fillMaxWidth()

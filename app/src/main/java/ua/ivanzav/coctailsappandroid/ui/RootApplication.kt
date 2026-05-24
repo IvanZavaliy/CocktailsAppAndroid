@@ -89,11 +89,13 @@ fun RootApplication() {
                 val image = backStackEntry.arguments?.getString("image") ?: ""
                 val text = backStackEntry.arguments?.getString("text") ?: ""
                 val drinkId = backStackEntry.arguments?.getString("id") ?: ""
+                val userData = googleAuthUiClient.getSignedInUser()
 
                 CocktailDetailScreen(
                     imageUrl = image,
                     labelText = text,
                     drinkId = drinkId,
+                    userId = userData?.userId,
                     animatedVisibilityScope = this,
                     onBackClick = {
                         navController.popBackStack()
@@ -114,10 +116,12 @@ fun RootApplication() {
             ) { backStackEntry ->
                 val name = backStackEntry.arguments?.getString("name") ?: ""
                 val image = backStackEntry.arguments?.getString("image") ?: ""
+                val userData = googleAuthUiClient.getSignedInUser()
 
                 IngredientDetailScreen(
                     imageUrl = image,
                     ingredientName = name,
+                    userId = userData?.userId,
                     animatedVisibilityScope = this,
                     onBackClick = {
                         navController.popBackStack()

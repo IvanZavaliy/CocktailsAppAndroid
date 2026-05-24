@@ -55,6 +55,7 @@ import ua.ivanzav.coctailsappandroid.ui.screens.ContentLoading
 fun SharedTransitionScope.IngredientDetailScreen(
     imageUrl: String,
     ingredientName: String,
+    userId: String?,
     animatedVisibilityScope: AnimatedVisibilityScope,
     onBackClick: () -> Unit,
     onCocktailClick: (String, String, String) -> Unit,
@@ -66,7 +67,12 @@ fun SharedTransitionScope.IngredientDetailScreen(
         viewModel.getCocktailsByIngredient(ingredientName)
     }
 
+    LaunchedEffect(userId) {
+        viewModel.fetchFavorites(userId)
+    }
+
     val ingredientDetailUiState = viewModel.ingredientDetailUiState
+    val favoriteIds = viewModel.favoriteIds
 
     Box(
         modifier = Modifier
@@ -142,6 +148,7 @@ fun SharedTransitionScope.IngredientDetailScreen(
                 is CocktailsAppUiState.Loading -> { item { ContentLoading() } }
                 is CocktailsAppUiState.Success -> cocktailsGridItems(
                     cocktails = ingredientDetailUiState.cocktailModels,
+                    favoriteIds = favoriteIds,
                     sharedTransitionScope = this@IngredientDetailScreen,
                     animatedVisibilityScope = animatedVisibilityScope,
                     onCocktailClick = onCocktailClick
@@ -173,6 +180,7 @@ fun SharedTransitionScope.IngredientDetailScreen(
 @OptIn(ExperimentalSharedTransitionApi::class)
 fun LazyGridScope.cocktailsGridItems(
     cocktails: List<CocktailsDataJson>,
+    favoriteIds: Set<String>,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
     onCocktailClick: (String, String, String) -> Unit
@@ -185,6 +193,7 @@ fun LazyGridScope.cocktailsGridItems(
         with(sharedTransitionScope) {
             CocktailCard(
                 cocktailModel = model,
+                isFavorite = favoriteIds.contains(model.id),
                 animatedVisibilityScope = animatedVisibilityScope,
                 modifier = Modifier
                     .clickable { onCocktailClick(model.image, model.name, model.id) }

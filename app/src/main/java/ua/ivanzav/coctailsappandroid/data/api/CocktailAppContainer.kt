@@ -4,7 +4,12 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import ua.ivanzav.coctailsappandroid.data.repository.CocktailsAppRepository
+import ua.ivanzav.coctailsappandroid.data.repository.FavoriteRepository
+import ua.ivanzav.coctailsappandroid.data.repository.FirestoreFavoriteRepository
 import ua.ivanzav.coctailsappandroid.data.repository.NetworkCocktailsAppRepository
 import ua.ivanzav.coctailsappandroid.di.AlcoholCocktailApiService
 import ua.ivanzav.coctailsappandroid.di.CocktailDetailApiService
@@ -14,10 +19,19 @@ import ua.ivanzav.coctailsappandroid.di.NonAlcoholCocktailApiService
 
 interface CocktailAppContainer {
     val cocktailsAppRepository: CocktailsAppRepository
+    val favoriteRepository: FavoriteRepository
 }
 
 class DefaultCocktailAppContainer : CocktailAppContainer {
     private val baseUrl = "https://thecocktaildb.com"
+
+    private val firestore: FirebaseFirestore by lazy {
+        Firebase.firestore
+    }
+
+    override val favoriteRepository: FavoriteRepository by lazy {
+        FirestoreFavoriteRepository(firestore)
+    }
 
     private val jsonConfig = Json {
         ignoreUnknownKeys = true

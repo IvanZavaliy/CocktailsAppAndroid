@@ -12,13 +12,28 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.launch
 import ua.ivanzav.coctailsappandroid.CocktailsApplication
 import ua.ivanzav.coctailsappandroid.data.repository.CocktailsAppRepository
+import ua.ivanzav.coctailsappandroid.data.repository.FavoriteRepository
 import ua.ivanzav.coctailsappandroid.ui.navigation.CocktailsAppUiState
 import ua.ivanzav.coctailsappandroid.ui.navigation.CocktailsPage
 
-class IngredientDetailViewModel(private val cocktailsAppRepository: CocktailsAppRepository): ViewModel() {
+class IngredientDetailViewModel(
+    private val cocktailsAppRepository: CocktailsAppRepository,
+    private val favoriteRepository: FavoriteRepository
+): ViewModel() {
 
     var ingredientDetailUiState: CocktailsAppUiState by mutableStateOf(CocktailsAppUiState.Loading)
         private set
+
+    var favoriteIds by mutableStateOf(setOf<String>())
+        private set
+
+    fun fetchFavorites(userId: String?) {
+        if (userId == null) return
+        viewModelScope.launch {
+            val favorites = favoriteRepository.getFavorites(userId)
+            favoriteIds = favorites.map { it.id }.toSet()
+        }
+    }
 
     fun getCocktailsByIngredient(ingredientName: String) {
         viewModelScope.launch {
@@ -43,7 +58,11 @@ class IngredientDetailViewModel(private val cocktailsAppRepository: CocktailsApp
             initializer {
                 val application = (this[APPLICATION_KEY] as CocktailsApplication)
                 val cocktailsAppRepository = application.container.cocktailsAppRepository
-                IngredientDetailViewModel(cocktailsAppRepository = cocktailsAppRepository)
+                val favoriteRepository = application.container.favoriteRepository
+                IngredientDetailViewModel(
+                    cocktailsAppRepository = cocktailsAppRepository,
+                    favoriteRepository = favoriteRepository
+                )
             }
         }
     }

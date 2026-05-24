@@ -22,6 +22,7 @@ import ua.ivanzav.coctailsappandroid.ui.components.CocktailCard
 @Composable
 fun SharedTransitionScope.CocktailsListScreen(
     cocktailModels: List<CocktailsDataJson>,
+    favoriteIds: Set<String>,
     animatedVisibilityScope: AnimatedVisibilityScope,
     onCocktailClick: (String, String, String) -> Unit,
     modifier: Modifier = Modifier
@@ -41,7 +42,8 @@ fun SharedTransitionScope.CocktailsListScreen(
         ) {
             items(items = cocktailModels, key = { model -> model.id }) { model ->
                 CocktailCard(
-                    model,
+                    cocktailModel = model,
+                    isFavorite = favoriteIds.contains(model.id),
                     animatedVisibilityScope = animatedVisibilityScope,
                     modifier = Modifier
                         .clickable { onCocktailClick(model.image, model.name, model.id) }

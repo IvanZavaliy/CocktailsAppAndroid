@@ -14,10 +14,14 @@ import ua.ivanzav.coctailsappandroid.CocktailsApplication
 import ua.ivanzav.coctailsappandroid.data.model.CocktailDetailDataJson
 import ua.ivanzav.coctailsappandroid.data.model.CocktailsDataJson
 import ua.ivanzav.coctailsappandroid.data.repository.CocktailsAppRepository
+import ua.ivanzav.coctailsappandroid.data.repository.FavoriteRepository
 import ua.ivanzav.coctailsappandroid.ui.screens.cocktail.CocktailDetailUiState
 import java.io.IOException
 
-class SearchViewModel(private val cocktailsAppRepository: CocktailsAppRepository) : ViewModel() {
+class SearchViewModel(
+    private val cocktailsAppRepository: CocktailsAppRepository,
+    private val favoriteRepository: FavoriteRepository
+) : ViewModel() {
 
     var searchQuery by mutableStateOf("")
         private set
@@ -25,9 +29,19 @@ class SearchViewModel(private val cocktailsAppRepository: CocktailsAppRepository
         private set
     var isSearchExecuted by mutableStateOf(false)
         private set
+    var favoriteIds by mutableStateOf(setOf<String>())
+        private set
 
     private var rawSearchResults: List<CocktailDetailDataJson> = emptyList()
     private var currentTab: BottomNavItems = BottomNavItems.ALCOHOL
+
+    fun fetchFavorites(userId: String?) {
+        if (userId == null) return
+        viewModelScope.launch {
+            val favorites = favoriteRepository.getFavorites(userId)
+            favoriteIds = favorites.map { it.id }.toSet()
+        }
+    }
 
     fun updateQuery(newQuery: String) {
         searchQuery = newQuery
@@ -114,7 +128,11 @@ class SearchViewModel(private val cocktailsAppRepository: CocktailsAppRepository
             initializer {
                 val application = (this[APPLICATION_KEY] as CocktailsApplication)
                 val repository = application.container.cocktailsAppRepository
-                SearchViewModel(cocktailsAppRepository = repository)
+                val favoriteRepository = application.container.favoriteRepository
+                SearchViewModel(
+                    cocktailsAppRepository = repository,
+                    favoriteRepository = favoriteRepository
+                )
             }
         }
     }
