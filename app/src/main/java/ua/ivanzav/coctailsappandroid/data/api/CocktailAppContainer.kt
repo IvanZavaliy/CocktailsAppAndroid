@@ -23,7 +23,7 @@ interface CocktailAppContainer {
 }
 
 class DefaultCocktailAppContainer : CocktailAppContainer {
-    private val baseUrl = "https://thecocktaildb.com"
+    private val baseUrl = "https://cocktailsappapi-production.up.railway.app/"
 
     private val firestore: FirebaseFirestore by lazy {
         Firebase.firestore
