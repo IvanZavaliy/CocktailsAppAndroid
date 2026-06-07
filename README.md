@@ -233,20 +233,20 @@ The application is built upon the **MVVM (Model-View-ViewModel)** architecture:
 
 ```text
 ┌─────────────────────────────────────────────────────────────┐
-│                     UI Layer (Compose)                       │
+│                     UI Layer (Compose)                      │
 │  Screens: CocktailsList, CocktailDetail, Profile, SignIn    │
 │  Components: CocktailCard, DrawerContent                    │
 │  Navigation: AppNavigation, BottomNavItems                  │
 └───────────────────────────┬─────────────────────────────────┘
                             │ observes state
 ┌───────────────────────────▼─────────────────────────────────┐
-│                  ViewModel Layer                             │
-│  CocktailsListVM, CocktailDetailVM, FavoritesVM,           │
-│  SearchVM, SignInVM                                          │
+│                  ViewModel Layer                            │
+│  CocktailsListVM, CocktailDetailVM, FavoritesVM,            │
+│  SearchVM, SignInVM                                         │
 └───────────────────────────┬─────────────────────────────────┘
                             │ calls repositories
 ┌───────────────────────────▼─────────────────────────────────┐
-│                    Data Layer                                │
+│                    Data Layer                               │
 │  CocktailsAppRepository ←→ Retrofit API Services            │
 │  FavoriteRepository      ←→ Firebase Cloud Firestore        │
 │  GoogleAuthUiClient      ←→ Firebase Auth                   │
